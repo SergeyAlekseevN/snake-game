@@ -1,18 +1,27 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {GameComponent} from './game/game.component';
+import {LeaderboardComponent} from './leaderboard/leaderboard.component';
+import {SettingsComponent} from './settings/settings.component';
+import {MaterialModule} from "./material.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GameComponent,
+    LeaderboardComponent,
+    SettingsComponent
   ],
   imports: [
+    MaterialModule,
     BrowserModule,
-    BrowserAnimationsModule
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

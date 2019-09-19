@@ -1,0 +1,6 @@
+<h1>Зал славы</h1>
+<mat-list>
+  <mat-list-item *ngFor="let result of results; let i=index;">
+    {{i + 1}}. {{result.name}} - {{result.score}}
+  </mat-list-item>
+</mat-list>

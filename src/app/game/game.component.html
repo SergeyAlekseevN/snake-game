@@ -1,0 +1,15 @@
+<div *ngIf="!isGameStarted;else showGame" class="welcome-screen">
+  <h1>Snake {{"<?>"}}</h1>
+  <button mat-raised-button (click)="startGame()">Начать игру</button>
+</div>
+<ng-template #showGame>
+  <div class="game">
+    <div class="game-header">
+      <h4>Игрок: Сергей</h4>
+      <h4>Очки: {{score|number:"6."}}</h4>
+    </div>
+    <div id="playground"></div>
+
+    <button *ngIf="p5===undefined" (click)="initCanvas()">go</button>
+  </div>
+</ng-template>
