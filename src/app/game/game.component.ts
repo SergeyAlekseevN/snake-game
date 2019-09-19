@@ -1,5 +1,6 @@
-import {Component, OnDestroy} from '@angular/core';
-import * as p5 from 'p5';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import * as P5 from 'p5';
+import {Playground} from "./playground";
 
 
 @Component({
@@ -7,65 +8,39 @@ import * as p5 from 'p5';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnDestroy {
-  isGameStarted = false;
-  score: number = 570;
+export class GameComponent implements OnDestroy, OnInit {
+  private p: P5;
+  private isGameStarted: boolean;
+  private score: number;
 
-  startGame() {
-    this.isGameStarted = true;
-    // noinspection JSPotentiallyInvalidConstructorUsage
-
+  constructor() {
+    this.isGameStarted = false;
+    this.score = 570;
   }
 
-  stopGame() {
-    if (this.p5 !== undefined) {
-      this.p5.noCanvas();
-    }
+  ngOnInit(): void {
+    this.startGame();
   }
 
   ngOnDestroy(): void {
     this.stopGame();
   }
 
-  // noinspection LocalVariableNamingConventionJS
-  private p5: p5;
-  private origin = {x: 0, y: 0};
-  private toggle = true;
-
-  constructor() {
-    // window.onresize = this.onWindowResize.bind(this);
+  startGame() {
+    this.initCanvas();
+    this.isGameStarted = true;
   }
 
-  // private onWindowResize($event) {
-  //   this.p5.resizeCanvas(this.p5.windowWidth, this.p5.windowHeight);
-  // }
-
-  private drawing(p: any): any {
-    p.setup = () => {
-      p.createCanvas(800, 800).parent('playground');
-      p.background(0);
-    };
-
-    p.draw = () => {
-      const center = {
-        x: p.width / 2,
-        y: p.height / 2
-      };
-
-      p.background(51);
-
-      p.fill(255);
-      p.noStroke();
-      p.textSize(50);
-      let text = "Snake <?>";
-      p.text(text, center.x++, center.y);
-    };
+  stopGame() {
+    if (this.p !== undefined) {
+      this.p.noCanvas();
+    }
   }
 
   initCanvas() {
-    if (this.p5 !== undefined) {
-      this.p5.noCanvas();
+    if (this.p !== undefined) {
+      this.p.noCanvas();
     }
-    this.p5 = new p5(this.drawing);
+    this.p = new P5(Playground);
   }
 }
