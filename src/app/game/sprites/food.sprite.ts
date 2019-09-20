@@ -7,7 +7,7 @@ import {GameSettings} from "../game.settings";
  * Еда.
  */
 export class Food extends GameSprite {
-  public food: Vector;
+  public coord: Vector;
 
   constructor(p: p5, public settings: GameSettings) {
     super(p);
@@ -15,7 +15,7 @@ export class Food extends GameSprite {
 
   draw(p: p5): void {
     p.fill('red');
-    p.rect(this.food.x, this.food.y, this.settings.scale, this.settings.scale);
+    p.rect(this.coord.x, this.coord.y, this.settings.scale, this.settings.scale);
   }
 
   update(p: p5): void {
@@ -31,7 +31,7 @@ export class Food extends GameSprite {
     let cols = p.floor(width / scale);
     let rows = p.floor(height / scale);
 
-    this.food = p.createVector(p.floor(p.random(cols)), p.floor(p.random(rows)));
-    this.food.mult(scale);
+    this.coord = p.createVector(p.floor(p.random(cols)), p.floor(p.random(rows)));
+    this.coord.mult(scale);
   }
 }

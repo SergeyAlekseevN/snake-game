@@ -14,7 +14,7 @@ export class GameController extends GameSprite {
   }
 
   update(): void {
-    if (this.snake.eat(this.food.food)) {
+    if (this.snake.eat(this.food.coord)) {
       this.food.setNewPlace();
     }
   }
