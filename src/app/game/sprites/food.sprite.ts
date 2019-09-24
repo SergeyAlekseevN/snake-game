@@ -22,7 +22,7 @@ export class Food extends GameSprite {
     // only self-update.
   }
 
-  setNewPlace(): void {
+  putOnNewPlace(): void {
     const p = this.p;
     const scale = this.settings.scale;
     const height = this.settings.height;
