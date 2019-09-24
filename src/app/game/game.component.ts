@@ -3,7 +3,6 @@ import * as P5 from 'p5';
 import {GameSettings} from "./game.settings";
 import {GameController} from "./game.controller";
 
-
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
