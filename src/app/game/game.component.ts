@@ -1,11 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
 import * as P5 from 'p5';
 import {GameSettings} from "./game.settings";
-import {Snake} from "./sprites/snake.sprite";
-import {Playground} from "./sprites/playground.sprite";
-import {GameSprite} from "./sprites/game.sprite";
 import {GameController} from "./game.controller";
-import {Food} from "./sprites/food.sprite";
 
 
 @Component({
@@ -13,25 +9,28 @@ import {Food} from "./sprites/food.sprite";
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnDestroy, OnInit {
+export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   private p: P5;
   private isGameStarted: boolean;
   private score: number;
-
-  private playground: Playground;
-  private snake: Snake;
   private readonly settings: GameSettings;
+  private roundTime: number;
+  private game: GameController;
 
   constructor() {
-    this.settings = new GameSettings(800, 800, 25, 24);
+    this.settings = new GameSettings(800, 800, 80, 10);
   }
 
   ngOnInit(): void {
-    // this.startGame();
+    console.log('oninit')
   }
 
   ngOnDestroy(): void {
     this.stopGame();
+  }
+
+  ngAfterContentInit(): void {
+    this.startGame();
   }
 
   startGame() {
@@ -52,7 +51,6 @@ export class GameComponent implements OnDestroy, OnInit {
       this.p.noCanvas();
     }
 
-    let sprites: GameSprite[] = [];
     this.p = new P5((p: P5) => {
         p.setup = (): void => {
           p.createCanvas(this.settings.width + 1, this.settings.height + 1).parent('canvas');
@@ -61,8 +59,9 @@ export class GameComponent implements OnDestroy, OnInit {
         };
 
         p.draw = (): void => {
-          sprites.forEach(sprite => sprite.updateSprite());
-          sprites.forEach(sprite => sprite.drawSprite());
+          this.game.update(p);
+          this.score = this.game.score;
+          this.game.draw(p);
 
           // show fps
           p.fill(p.color('orange'));
@@ -72,20 +71,10 @@ export class GameComponent implements OnDestroy, OnInit {
         };
 
         p.keyPressed = (): void => {
-          this.snake.keyPressed(p.keyCode);
+          this.game.keyPressed(p.keyCode);
         };
       }
     );
-
-    this.playground = new Playground(this.p, this.settings);
-    this.snake = new Snake(this.p, this.settings);
-    const food = new Food(this.p, this.settings);
-    let controller = new GameController(this.p, this.snake, food);
-    sprites.push(
-      this.playground,
-      this.snake,
-      food,
-      controller
-    );
+    this.game = new GameController(this.p, this.settings);
   }
 }
