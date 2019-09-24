@@ -1,10 +1,10 @@
 import * as p5 from "p5";
-import {GameSprite} from "./sprites/game.sprite";
-import {Snake} from "./sprites/snake.sprite";
-import {Food} from "./sprites/food.sprite";
-import {Playground} from "./sprites/playground.sprite";
+import {GameSprite} from "./engine/game.sprite";
+import {Snake} from "./engine/snake.sprite";
+import {Food} from "./engine/food.sprite";
+import {Playground} from "./engine/playground.sprite";
 import {GameSettings} from "./game.settings";
-import {Direction} from "./sprites/direction.enum";
+import {Direction} from "./engine/direction.enum";
 
 export class GameController extends GameSprite {
   private readonly snake: Snake;
