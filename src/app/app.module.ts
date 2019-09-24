@@ -7,9 +7,11 @@ import {GameComponent} from './game/game.component';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 import {SettingsComponent} from './settings/settings.component';
 import {MaterialModule} from "./material.module";
+import {Stopwatch} from "./game/stopwatch";
 
 @NgModule({
   declarations: [
+    Stopwatch,
     AppComponent,
     GameComponent,
     LeaderboardComponent,
