@@ -2,7 +2,8 @@ import * as p5 from "p5";
 import {Vector} from "p5";
 import {GameSprite} from "./game.sprite";
 import {GameSettings} from "../game.settings";
-import {Direction} from "./direction.enum";
+import {Direction} from "../direction.enum";
+import {LocationController} from "../location.controller";
 
 /**
  * Змейка.
@@ -19,7 +20,7 @@ export class Snake extends GameSprite {
   private isMoving: boolean = false;
   private isOpenMouth: boolean = false;
 
-  constructor(public p: p5, public settings: GameSettings) {
+  constructor(public p: p5, public settings: GameSettings, public locationController: LocationController) {
     super(p);
   }
 
@@ -51,13 +52,17 @@ export class Snake extends GameSprite {
   }
 
   update(p: p5) {
+    this.applyMode();
     if (this.isMoving) {
       this.checkNextStep();
       this.checkCurrentStep();
       this.move();
       this.checkSelfCollision();
-      this.isMoving = false;
     }
+  }
+
+  private applyMode(){
+    // this.isMoving = false;
   }
 
   draw(p: p5): void {
@@ -131,11 +136,12 @@ export class Snake extends GameSprite {
 
     const newHead = this.getNextPosition(this.body[0]);
     this.body.unshift(newHead);
-
+    this.locationController.setRealCoord(newHead);
     if (this.grow) {
       this.grow = false;
     } else {
-      this.body.pop();
+      const deletedTile = this.body.pop();
+      this.locationController.unsetRealCoord(deletedTile);
     }
     console.log(`snake length ${this.body.length}, isGrow = ${this.grow}`);
   }

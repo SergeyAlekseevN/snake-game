@@ -1,7 +1,7 @@
 import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
 import * as P5 from 'p5';
-import {GameSettings} from "./game.settings";
-import {GameController} from "./game.controller";
+import {GameSettings} from "./engine/game.settings";
+import {GameController} from "./engine/game.controller";
 
 @Component({
   selector: 'app-game',
@@ -17,7 +17,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   private game: GameController;
 
   constructor() {
-    this.settings = new GameSettings(800, 800, 80, 10);
+    this.settings = new GameSettings(800, 800, 80, 5);
   }
 
   ngOnInit(): void {
