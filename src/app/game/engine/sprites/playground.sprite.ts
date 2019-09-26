@@ -28,5 +28,5 @@ export class Playground extends GameSprite {
     for (let i = 0; i <= height / scale; i++) {
       p.line(0, scale * i, width, scale * i)
     }
-  };
+  }
 }
