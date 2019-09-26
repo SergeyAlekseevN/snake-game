@@ -22,16 +22,7 @@ export class Food extends GameSprite {
     // only self-update.
   }
 
-  putOnNewPlace(): void {
-    const p = this.p;
-    const scale = this.settings.scale;
-    const height = this.settings.height;
-    const width = this.settings.width;
-
-    let cols = p.floor(width / scale);
-    let rows = p.floor(height / scale);
-
-    this.coord = p.createVector(p.floor(p.random(cols)), p.floor(p.random(rows)));
-    this.coord.mult(scale);
+  putOnNewPlace(newPlace: Vector): void {
+    this.coord = newPlace;
   }
 }
