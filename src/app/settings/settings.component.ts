@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-settings',
@@ -6,8 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+  gameModes = [
+    "normal",
+    "inverse keys",
+    "manual"
+  ];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

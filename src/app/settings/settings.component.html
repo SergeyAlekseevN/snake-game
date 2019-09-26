@@ -1,1 +1,31 @@
 <h1>Настройки игры</h1>
+<form>
+  <h3>Настройка режимов игры</h3>
+  <mat-form-field>
+    <mat-label>Спец. режимы игры</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let gameMode of gameModes" [value]="gameMode">
+        {{gameMode}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-radio-group aria-label="Select an option">
+    <mat-radio-button value="1">На время</mat-radio-button>
+    <mat-radio-button value="2">На жизни</mat-radio-button>
+  </mat-radio-group>
+  <mat-form-field><input matInput placeholder="Продолжительность игрового сеанса"></mat-form-field>
+
+  <h3>Настройки игрового поля</h3>
+  <mat-form-field><input matInput placeholder="Ширина [px]"></mat-form-field>
+  <mat-form-field><input matInput placeholder="Высота[px]"></mat-form-field>
+  <mat-form-field><input matInput placeholder="Масштаб [px]"></mat-form-field>
+  <mat-form-field><input matInput placeholder="FPS"></mat-form-field>
+
+  <h3>Настройки змейки</h3>
+  <mat-form-field><input matInput placeholder="Начальная длина"></mat-form-field>
+  <mat-form-field><input matInput placeholder="Начальная позиция"></mat-form-field>
+  <mat-form-field><input matInput placeholder="Начальное направление"></mat-form-field>
+
+</form>
+
