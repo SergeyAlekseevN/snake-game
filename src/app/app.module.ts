@@ -6,7 +6,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {GameComponent} from './game/game.component';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 import {SettingsComponent} from './settings/settings.component';
-import {MaterialModule} from "./material.module";
+import {MaterialModule} from "./material/material.module";
 import {Stopwatch} from "./game/stopwatch";
 
 @NgModule({
