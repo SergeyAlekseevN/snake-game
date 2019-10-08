@@ -1,8 +1,23 @@
 .game {
-  min-width: 800px;
+  display: flex;
+  flex-direction: row;
 }
 
-.game-header {
+.game-info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+h4 {
+  padding: 0;
+  margin: 10px;
+}
+
+#left-sidebar {
+  min-width: 300px;
+}
+
+#right-sidebar {
+  min-width: 300px;
 }
