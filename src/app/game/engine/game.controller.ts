@@ -19,8 +19,8 @@ export class GameController extends GameSprite {
 
   constructor(public p: p5, public settings: GameSettings, actionHandler: (message: string) => void) {
     super(p);
+    console.log("constructor of game controller");
     this.actionLogger = actionHandler;
-
     this.locationController = new LocationController(p, settings);
     this.playground = new Playground(this.p, this.settings);
     this.snake = new Snake(this.p, this.settings, this.locationController);
