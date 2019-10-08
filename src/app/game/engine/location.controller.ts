@@ -28,9 +28,7 @@ export class LocationController {
     let newCoord;
     do {
       newCoord = p.createVector(p.floor(p.random(this.settings.cols)), p.floor(p.random(this.settings.rows)));
-      this.set(newCoord.x, newCoord.y);
     } while (this.hasSet(newCoord.x, newCoord.y));
     return newCoord;
   }
-
 }
