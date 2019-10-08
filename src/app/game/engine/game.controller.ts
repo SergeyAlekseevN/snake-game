@@ -15,9 +15,11 @@ export class GameController extends GameSprite {
 
   score: number = 0;
   private isPaused: boolean = true;
+  private readonly actionLogger: (message: string) => void;
 
-  constructor(public p: p5, public settings: GameSettings) {
+  constructor(public p: p5, public settings: GameSettings, actionHandler: (message: string) => void) {
     super(p);
+    this.actionLogger = actionHandler;
 
     this.locationController = new LocationController(p, settings);
     this.playground = new Playground(this.p, this.settings);
@@ -32,8 +34,9 @@ export class GameController extends GameSprite {
     if (this.isPaused) {
       if (this.snake.isFoodEaten(this.food.coord)) {
         this.snake.growUp();
-        this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
+        this.actionLogger("Съели правильную еду.");
         this.score++;
+        this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
       }
       this.snake.update(p);
     }
