@@ -14,19 +14,25 @@ export class Playground extends GameSprite {
   }
 
   draw(p: p5) {
-    const scale = this.settings.scale;
-    const height = this.settings.height;
-    const width = this.settings.width;
+    const cols = this.settings.cols;
+    const rows = this.settings.rows;
 
+    const scaleX = this.settings.scaleX;
+    const scaleY = this.settings.scaleY;
+
+    const width = this.settings.width;
+    const height = this.settings.height;
+
+    console.log(`width=${width} height=${height} scaleX=${scaleX} scaleY=${scaleY} cols=${cols} rows=${rows}`);
     p.background('white');
 
     //клетки поля.
     p.strokeWeight(0.1);
-    for (let i = 0; i <= width / scale; i++) {
-      p.line(i * scale, 0, i * scale, height)
+    for (let col = 0; col <= cols; col++) {
+      p.line(col * scaleX, 0, col * scaleX, height)
     }
-    for (let i = 0; i <= height / scale; i++) {
-      p.line(0, scale * i, width, scale * i)
+    for (let row = 0; row <= rows; row++) {
+      p.line(0, scaleY * row, width, scaleY * row)
     }
   }
 }
