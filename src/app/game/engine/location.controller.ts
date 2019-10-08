@@ -8,11 +8,6 @@ export class LocationController {
   constructor(public p: p5, public settings: GameSettings) {
   }
 
-  public setRealCoord(realCoord: Vector) {
-    const gameCoord = this.p.createVector(realCoord.x, realCoord.y).div(this.settings.scale);
-    this.set(gameCoord.x, gameCoord.y);
-  }
-
   public set(x: number, y: number): void {
     this.locations.set(`${x}:${y}`, true);
   }
@@ -30,23 +25,12 @@ export class LocationController {
 
   public getRandomFreeCell(): Vector {
     const p = this.p;
-    const scale = this.settings.scale;
-    const height = this.settings.height;
-    const width = this.settings.width;
-
-    let cols = p.floor(width / scale);
-    let rows = p.floor(height / scale);
-
     let newCoord;
     do {
-      newCoord = p.createVector(p.floor(p.random(cols)), p.floor(p.random(rows)));
+      newCoord = p.createVector(p.floor(p.random(this.settings.cols)), p.floor(p.random(this.settings.rows)));
+      this.set(newCoord.x, newCoord.y);
     } while (this.hasSet(newCoord.x, newCoord.y));
-
-    return newCoord.mult(scale);
+    return newCoord;
   }
 
-  unsetRealCoord(realCoord: Vector) {
-    const gameCoord = this.p.createVector(realCoord.x, realCoord.y).div(this.settings.scale);
-    this.unset(gameCoord.x, gameCoord.y);
-  }
 }
