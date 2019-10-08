@@ -1,5 +1,6 @@
 import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
 import * as P5 from 'p5';
+import * as p5 from 'p5';
 import {GameSettings} from "./engine/game.settings";
 import {GameController} from "./engine/game.controller";
 
@@ -17,7 +18,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   private game: GameController;
 
   constructor() {
-    this.settings = new GameSettings(800, 800, 80, 5);
+    this.settings = new GameSettings(800, 800, 16, 12);
   }
 
   ngOnInit(): void {
@@ -50,6 +51,13 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
       this.p.noCanvas();
     }
 
+    function showFps(p: p5) {
+      p.fill(p.color('orange'));
+      const size = this.settings.scale / 2;
+      p.textSize(size);
+      p.text("fps " + p.frameRate(), 0, size);
+    }
+
     this.p = new P5((p: P5) => {
         p.setup = (): void => {
           p.createCanvas(this.settings.width + 1, this.settings.height + 1).parent('canvas');
@@ -63,10 +71,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
           this.game.draw(p);
 
           // show fps
-          p.fill(p.color('orange'));
-          const size = this.settings.scale / 2;
-          p.textSize(size);
-          p.text("fps " + p.frameRate(), 0, size);
+          showFps.call(this, p);
         };
 
         p.keyPressed = (): void => {
