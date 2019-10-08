@@ -26,7 +26,7 @@ export class GameController extends GameSprite {
     this.snake = new Snake(this.p, this.settings, this.locationController);
     this.snake.initSnake(4, p.createVector(4, 0));
 
-    this.food = new Food(this.p, this.settings);
+    this.food = new Food(this.p, this.settings, this.locationController);
     this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
   }
 
@@ -37,6 +37,7 @@ export class GameController extends GameSprite {
         this.actionLogger("Съели правильную еду.");
         this.score++;
         this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
+        this.food.setRandomFreeSkin();
       }
       this.snake.update(p);
     }

@@ -2,6 +2,7 @@ import * as p5 from "p5";
 import {Vector} from "p5";
 import {GameSprite} from "./game.sprite";
 import {GameSettings} from "../game.settings";
+import {LocationController} from "../location.controller";
 
 /**
  * Еда.
@@ -11,7 +12,7 @@ export class Food extends GameSprite {
   public shape: Shape = Shape.square;
   public color: Color = Color.RED;
 
-  constructor(p: p5, public settings: GameSettings) {
+  constructor(p: p5, public settings: GameSettings, public locationController: LocationController) {
     super(p);
   }
 
@@ -37,7 +38,7 @@ export class Food extends GameSprite {
     if (this.shape === Shape.square) {
       p.rect(x * scaleX, y * scaleY, scaleX, scaleY);
     } else if (this.shape === Shape.circle) {
-      p.ellipse(x * scaleX, y * scaleY, scaleX, scaleY);
+      p.ellipse(x * scaleX + Math.floor(scaleX / 2), y * scaleY + Math.floor(scaleY / 2), scaleX, scaleY);
     } else if (this.shape === Shape.triangle) {
       p.triangle(
         //up
@@ -67,7 +68,26 @@ export class Food extends GameSprite {
         scaleX,
         scaleY - Math.floor(scaleY / 2)
       );
+    } else {
+      console.log(`shape= ${this.shape} color=${this.color}`)
     }
+  }
+
+  private skins: Set<string> = new Set<string>();
+
+  setRandomFreeSkin() {
+    let newShape;
+    let newColor;
+    do {
+      newShape = this.p.floor(this.p.random(4));
+      newColor = this.p.floor(this.p.random(4));
+    } while (this.skins.has(`${newShape}:${newColor}`));
+
+    this.skins.delete(`${this.shape}:${this.color}`);
+    this.skins.add(`${newShape}:${newColor}`);
+
+    this.shape = newShape;
+    this.color = newColor;
   }
 
   update(p: p5): void {
@@ -75,6 +95,10 @@ export class Food extends GameSprite {
   }
 
   putOnNewPlace(newPlace: Vector): void {
+    if (this.coord !== undefined) {
+      this.locationController.unset(this.coord.x, this.coord.y);
+    }
+    this.locationController.set(newPlace.x, newPlace.y);
     this.coord = newPlace;
   }
 }
