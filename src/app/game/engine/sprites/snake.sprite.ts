@@ -82,111 +82,106 @@ export class Snake extends GameSprite {
 
     const scaleX = this.settings.scaleX;
     const scaleY = this.settings.scaleY;
+    const spriteScaleX = this.sprite.width / 5;
+    const spriteScaleY = this.sprite.height / 4;
 
-    // head
 
-    let head = this.getHead();
-    let spriteScaleX = this.sprite.width / 5;
-    let spriteScaleY = this.sprite.height / 4;
-    let segx = head.x;
-    let segy = head.y;
-    // Head; Determine the correct image
+    for (let i = 0; i < this.body.length; i++) { //нулевой элемент у нас голова
+      let segx;
+      let segy;
 
-    // Previous segment
-    let nseg = this.body[1]; // Next segment
-    if (segy < nseg.y) {
-      // Up
-      tx = 3;
-      ty = 0;
-    } else if (segx > nseg.x) {
-      // Right
-      tx = 4;
-      ty = 0;
-    } else if (segy > nseg.y) {
-      // Down
-      tx = 4;
-      ty = 1;
-    } else if (segx < nseg.x) {
-      // Left
-      tx = 3;
-      ty = 1;
-    }
+      if (i === 0) {
+        // head
+        let head = this.body[0];
 
-    p.image(this.sprite, head.x * scaleX, head.y * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
+        segx = head.x;
+        segy = head.y;
+        // Head; Determine the correct image
 
-    // body
-    for (let i = 1; i < this.body.length - 1; i++) { //нулевой элемент у нас голова
-      const segment = this.body[i];
-      segx = segment.x;
-      segy = segment.y;
-      // Sprite column and row that gets calculated
-      tx = 0;
-      ty = 0;
-
-      // Body; Determine the correct image
-      pseg = this.body[i - 1];
-      nseg = this.body[i + 1]; // Next segment
-      if (pseg.x < segx && nseg.x > segx || nseg.x < segx && pseg.x > segx) {
-        // Horizontal Left-Right
-        tx = 1;
-        ty = 0;
-      } else if (pseg.x < segx && nseg.y > segy || nseg.x < segx && pseg.y > segy) {
-        // Angle Left-Down
-        tx = 2;
-        ty = 0;
-      } else if (pseg.y < segy && nseg.y > segy || nseg.y < segy && pseg.y > segy) {
-        // Vertical Up-Down
-        tx = 2;
-        ty = 1;
-      } else if (pseg.y < segy && nseg.x < segx || nseg.y < segy && pseg.x < segx) {
-        // Angle Top-Left
-        tx = 2;
-        ty = 2;
-      } else if (pseg.x > segx && nseg.y < segy || nseg.x > segx && pseg.y < segy) {
-        // Angle Right-Up
-        tx = 0;
-        ty = 1;
-      } else if (pseg.y > segy && nseg.x > segx || nseg.y > segy && pseg.x > segx) {
-        // Angle Down-Right
+        // Previous segment
+        let nseg = this.body[1]; // Next segment
+        if (segy < nseg.y) {
+          // Up
+          tx = 3;
+          ty = 0;
+        } else if (segx > nseg.x) {
+          // Right
+          tx = 4;
+          ty = 0;
+        } else if (segy > nseg.y) {
+          // Down
+          tx = 4;
+          ty = 1;
+        } else if (segx < nseg.x) {
+          // Left
+          tx = 3;
+          ty = 1;
+        }
+      } else if (i === this.body.length - 1) {
+        //tail
+        let tail = this.body[i];
+        // Tail; Determine the correct image
+        pseg = this.body[i - 1]; // Prev segment
+        segx = tail.x;
+        segy = tail.y;
+        if (pseg.y < segy) {
+          // Up
+          tx = 3;
+          ty = 2;
+        } else if (pseg.x > segx) {
+          // Right
+          tx = 4;
+          ty = 2;
+        } else if (pseg.y > segy) {
+          // Down
+          tx = 4;
+          ty = 3;
+        } else if (pseg.x < segx) {
+          // Left
+          tx = 3;
+          ty = 3;
+        }
+      } else {
+        const segment = this.body[i];
+        segx = segment.x;
+        segy = segment.y;
+        // Sprite column and row that gets calculated
         tx = 0;
         ty = 0;
+
+        // Body; Determine the correct image
+        pseg = this.body[i - 1];
+        let nseg = this.body[i + 1]; // Next segment
+        if (pseg.x < segx && nseg.x > segx || nseg.x < segx && pseg.x > segx) {
+          // Horizontal Left-Right
+          tx = 1;
+          ty = 0;
+        } else if (pseg.x < segx && nseg.y > segy || nseg.x < segx && pseg.y > segy) {
+          // Angle Left-Down
+          tx = 2;
+          ty = 0;
+        } else if (pseg.y < segy && nseg.y > segy || nseg.y < segy && pseg.y > segy) {
+          // Vertical Up-Down
+          tx = 2;
+          ty = 1;
+        } else if (pseg.y < segy && nseg.x < segx || nseg.y < segy && pseg.x < segx) {
+          // Angle Top-Left
+          tx = 2;
+          ty = 2;
+        } else if (pseg.x > segx && nseg.y < segy || nseg.x > segx && pseg.y < segy) {
+          // Angle Right-Up
+          tx = 0;
+          ty = 1;
+        } else if (pseg.y > segy && nseg.x > segx || nseg.y > segy && pseg.x > segx) {
+          // Angle Down-Right
+          tx = 0;
+          ty = 0;
+        }
       }
+
       // Draw the image of the snake part
       p.image(this.sprite, segx * scaleX, segy * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
     }
-
-    //tail
-    let tail = this.getTile();
-    // Tail; Determine the correct image
-    pseg = this.body[this.body.length - 2]; // Prev segment
-    segx = tail.x;
-    segy = tail.y;
-    if (pseg.y < segy) {
-      // Up
-      tx = 3;
-      ty = 2;
-    } else if (pseg.x > segx) {
-      // Right
-      tx = 4;
-      ty = 2;
-    } else if (pseg.y > segy) {
-      // Down
-      tx = 4;
-      ty = 3;
-    } else if (pseg.x < segx) {
-      // Left
-      tx = 3;
-      ty = 3;
-    }
-    p.image(this.sprite, segx * scaleX, segy * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
-  }
-
-  private getHead(): Vector {
-    return this.body[0];
-  }
-
-  private getTile(): Vector {
-    return this.body[this.body.length - 1];
   }
 
   growSnake() {
