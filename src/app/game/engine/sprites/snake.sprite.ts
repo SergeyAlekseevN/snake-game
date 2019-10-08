@@ -9,6 +9,8 @@ import {LocationController} from "../location.controller";
  * Змейка.
  */
 export class Snake extends GameSprite {
+
+  private sprite;
   private xSpeed = 1;
   private ySpeed = 0;
   private direction: Direction;
@@ -22,6 +24,7 @@ export class Snake extends GameSprite {
 
   constructor(public p: p5, public settings: GameSettings, public locationController: LocationController) {
     super(p);
+    this.sprite = p.loadImage('assets/snake.png');
   }
 
   /**
@@ -61,7 +64,7 @@ export class Snake extends GameSprite {
     }
   }
 
-  private applyMode(){
+  private applyMode() {
     // this.isMoving = false;
   }
 
@@ -79,21 +82,99 @@ export class Snake extends GameSprite {
     const scale = this.settings.scale;
 
     // head
-    p.fill(p.color('blue'));
+
     let head = this.getHead();
-    p.rect(head.x, head.y, scale, scale);
+    let spriteScaleX = this.sprite.width / 5;
+    let spriteScaleY = this.sprite.height / 4;
+    let segx = head.x;
+    let segy = head.y;
+    // Head; Determine the correct image
+    var nseg = this.body[1]; // Next segment
+    if (segy < nseg.y) {
+      // Up
+      tx = 3;
+      ty = 0;
+    } else if (segx > nseg.x) {
+      // Right
+      tx = 4;
+      ty = 0;
+    } else if (segy > nseg.y) {
+      // Down
+      tx = 4;
+      ty = 1;
+    } else if (segx < nseg.x) {
+      // Left
+      tx = 3;
+      ty = 1;
+    }
+
+    p.image(this.sprite, head.x, head.y, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
 
     // body
-    p.fill(p.color('green'));
     for (let i = 1; i < this.body.length - 1; i++) { //нулевой элемент у нас голова
-      p.rect(this.body[i].x, this.body[i].y, scale, scale);
+      var segment = this.body[i];
+      segx = segment.x;
+      segy = segment.y;
+      // Sprite column and row that gets calculated
+      var tx = 0;
+      var ty = 0;
+
+      // Body; Determine the correct image
+      var pseg = this.body[i - 1]; // Previous segment
+      var nseg = this.body[i + 1]; // Next segment
+      if (pseg.x < segx && nseg.x > segx || nseg.x < segx && pseg.x > segx) {
+        // Horizontal Left-Right
+        tx = 1;
+        ty = 0;
+      } else if (pseg.x < segx && nseg.y > segy || nseg.x < segx && pseg.y > segy) {
+        // Angle Left-Down
+        tx = 2;
+        ty = 0;
+      } else if (pseg.y < segy && nseg.y > segy || nseg.y < segy && pseg.y > segy) {
+        // Vertical Up-Down
+        tx = 2;
+        ty = 1;
+      } else if (pseg.y < segy && nseg.x < segx || nseg.y < segy && pseg.x < segx) {
+        // Angle Top-Left
+        tx = 2;
+        ty = 2;
+      } else if (pseg.x > segx && nseg.y < segy || nseg.x > segx && pseg.y < segy) {
+        // Angle Right-Up
+        tx = 0;
+        ty = 1;
+      } else if (pseg.y > segy && nseg.x > segx || nseg.y > segy && pseg.x > segx) {
+        // Angle Down-Right
+        tx = 0;
+        ty = 0;
+      }
+      // Draw the image of the snake part
+      p.image(this.sprite, segx, segy, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
     }
 
     //tail
-    p.fill(p.color('yellow'));
     let tail = this.getTile();
-    p.rect(tail.x, tail.y, scale, scale);
-
+    // Tail; Determine the correct image
+    var pseg = this.body[this.body.length - 2]; // Prev segment
+    segx = tail.x;
+    segy = tail.y;
+    if (pseg.y < segy) {
+      // Up
+      tx = 3;
+      ty = 2;
+    } else if (pseg.x > segx) {
+      // Right
+      tx = 4;
+      ty = 2;
+    } else if (pseg.y > segy) {
+      // Down
+      tx = 4;
+      ty = 3;
+    } else if (pseg.x < segx) {
+      // Left
+      tx = 3;
+      ty = 3;
+    }
+    p.image(this.sprite, segx, segy, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
   }
 
   private getHead(): Vector {
