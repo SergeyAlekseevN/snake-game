@@ -102,6 +102,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
           p.createCanvas(this.settings.width + 1, this.settings.height + 1).parent('canvas');
           p.frameRate(this.settings.fps);
           p.noCursor();
+          this.game = new GameController(this.p, this.settings, this.actionHandler);
         };
 
         p.draw = (): void => {
@@ -118,6 +119,5 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
         };
       }
     );
-    this.game = new GameController(this.p, this.settings, this.actionHandler);
   }
 }
