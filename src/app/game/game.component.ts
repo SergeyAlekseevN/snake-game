@@ -51,6 +51,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   }
 
   resize(width: number, height: number) {
+    console.log(`resize with ${width}x${height}`);
     if (height > width) {
       this.actionHandler("Неверное соотношение сторон.")
       return;
@@ -69,12 +70,14 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   }
 
   startGame() {
+    console.log("Start game");
     this.score = 0;
     this.isGameStarted = true;
     this.initCanvas();
   }
 
   stopGame() {
+    console.log("Stop game");
     this.isGameStarted = false;
     if (this.p !== undefined) {
       this.p.noCanvas();
@@ -82,13 +85,14 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   }
 
   initCanvas() {
+    console.log("init canvas");
     if (this.p !== undefined) {
       this.p.noCanvas();
     }
 
     function showFps(p: p5) {
       p.fill(p.color('orange'));
-      const size = this.settings.scale / 2;
+      const size = this.settings.scaleX / 2;
       p.textSize(size);
       p.text("fps " + p.frameRate(), 0, size);
     }
