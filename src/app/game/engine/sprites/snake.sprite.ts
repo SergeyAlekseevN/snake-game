@@ -216,7 +216,7 @@ export class Snake extends GameSprite {
 
     const newHead = this.getNextPosition(this.body[0]);
     this.body.unshift(newHead);
-    this.locationController.unset(newHead.x, newHead.y);
+    this.locationController.set(newHead.x, newHead.y);
     if (this.grow) {
       this.grow = false;
     } else {
