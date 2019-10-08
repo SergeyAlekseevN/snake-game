@@ -3,13 +3,13 @@ import * as p5 from "p5";
 import {Vector} from "p5";
 
 export class LocationController {
-  private locations: Map<string, boolean> = new Map();
+  private locations: Set<string> = new Set<string>();
 
   constructor(public p: p5, public settings: GameSettings) {
   }
 
   public set(x: number, y: number): void {
-    this.locations.set(`${x}:${y}`, true);
+    this.locations.add(`${x}:${y}`);
   }
 
   public unset(x: number, y: number): void {
@@ -17,10 +17,7 @@ export class LocationController {
   }
 
   public hasSet(x: number, y: number): boolean {
-    if (this.locations.has(`${x}:${y}`)) {
-      return this.locations.get(`${x}:${y}`);
-    }
-    return false;
+    return this.locations.has(`${x}:${y}`);
   }
 
   public getRandomFreeCell(): Vector {
