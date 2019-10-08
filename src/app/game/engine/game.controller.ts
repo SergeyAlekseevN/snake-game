@@ -14,6 +14,7 @@ export class GameController extends GameSprite {
   private readonly playground: Playground;
 
   score: number = 0;
+  private isPaused: boolean = true;
 
   constructor(public p: p5, public settings: GameSettings) {
     super(p);
@@ -28,12 +29,14 @@ export class GameController extends GameSprite {
   }
 
   update(p: p5): void {
-    if (this.snake.isFoodEaten(this.food.coord)) {
-      this.snake.growUp();
-      this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
-      this.score++;
+    if (this.isPaused) {
+      if (this.snake.isFoodEaten(this.food.coord)) {
+        this.snake.growUp();
+        this.food.putOnNewPlace(this.locationController.getRandomFreeCell());
+        this.score++;
+      }
+      this.snake.update(p);
     }
-    this.snake.update(p);
   }
 
   draw(p: p5): void {
@@ -52,6 +55,8 @@ export class GameController extends GameSprite {
       this.snake.setDirection(Direction.RIGHT);
     } else if (keyCode === this.p.LEFT_ARROW) {
       this.snake.setDirection(Direction.LEFT);
+    } else if (keyCode === 32) { // space key
+      this.isPaused = !this.isPaused;
     }
   }
 }
