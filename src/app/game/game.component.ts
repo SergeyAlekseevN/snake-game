@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import * as P5 from 'p5';
 import * as p5 from 'p5';
 import {GameSettings} from "./engine/game.settings";
@@ -17,8 +17,25 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   private roundTime: number;
   private game: GameController;
 
+  private actions: string[] = [];
+  private readonly actionsCapacity = 10;
+
+  actionHandler = (message: string) => {
+    this.actions.push(message);
+    if (this.actions.length > this.actionsCapacity) {
+      this.actions.shift();
+    }
+  };
+
+
   constructor() {
-    this.settings = new GameSettings(800, 800, 16, 12);
+    this.settings = new GameSettings(800, 800, 32, 32, 12);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(`resize ${event.target.innerWidth} x ${event.target.innerHeight}`);
+    this.resize(event.target.innerWidth, event.target.innerHeight);
   }
 
   ngOnInit(): void {
@@ -31,6 +48,24 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.startGame();
+  }
+
+  resize(width: number, height: number) {
+    if (height > width) {
+      this.actionHandler("Неверное соотношение сторон.")
+      return;
+    }
+    this.settings.height = height - 15; //15px margin top
+    this.settings.width = height - 15;
+
+    this.settings.scaleX = Math.floor(this.settings.width / this.settings.cols);
+    this.settings.scaleY = Math.floor(this.settings.height / this.settings.rows);
+
+    //cut
+    this.settings.width -= (this.settings.width % this.settings.cols);
+    this.settings.height -= (this.settings.height % this.settings.rows);
+
+    this.p.resizeCanvas(this.settings.width, this.settings.height);
   }
 
   startGame() {
@@ -79,6 +114,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
         };
       }
     );
-    this.game = new GameController(this.p, this.settings);
+    this.game = new GameController(this.p, this.settings, this.actionHandler);
   }
 }
