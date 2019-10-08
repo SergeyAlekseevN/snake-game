@@ -9,8 +9,7 @@ import {LocationController} from "../location.controller";
  * Змейка.
  */
 export class Snake extends GameSprite {
-
-  private sprite;
+  private readonly sprite;
   private xSpeed = 1;
   private ySpeed = 0;
   private direction: Direction;
@@ -69,7 +68,9 @@ export class Snake extends GameSprite {
   }
 
   draw(p: p5): void {
-
+    let pseg;
+    let ty;
+    let tx;
     /**
      * Отрисовать хвост в цикле.
      * Если в хвосте еда, отрисовать с едой.
@@ -79,7 +80,8 @@ export class Snake extends GameSprite {
      */
 
 
-    const scale = this.settings.scale;
+    const scaleX = this.settings.scaleX;
+    const scaleY = this.settings.scaleY;
 
     // head
 
@@ -89,7 +91,9 @@ export class Snake extends GameSprite {
     let segx = head.x;
     let segy = head.y;
     // Head; Determine the correct image
-    var nseg = this.body[1]; // Next segment
+
+    // Previous segment
+    let nseg = this.body[1]; // Next segment
     if (segy < nseg.y) {
       // Up
       tx = 3;
@@ -108,20 +112,20 @@ export class Snake extends GameSprite {
       ty = 1;
     }
 
-    p.image(this.sprite, head.x, head.y, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
+    p.image(this.sprite, head.x * scaleX, head.y * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
 
     // body
     for (let i = 1; i < this.body.length - 1; i++) { //нулевой элемент у нас голова
-      var segment = this.body[i];
+      const segment = this.body[i];
       segx = segment.x;
       segy = segment.y;
       // Sprite column and row that gets calculated
-      var tx = 0;
-      var ty = 0;
+      tx = 0;
+      ty = 0;
 
       // Body; Determine the correct image
-      var pseg = this.body[i - 1]; // Previous segment
-      var nseg = this.body[i + 1]; // Next segment
+      pseg = this.body[i - 1];
+      nseg = this.body[i + 1]; // Next segment
       if (pseg.x < segx && nseg.x > segx || nseg.x < segx && pseg.x > segx) {
         // Horizontal Left-Right
         tx = 1;
@@ -148,13 +152,13 @@ export class Snake extends GameSprite {
         ty = 0;
       }
       // Draw the image of the snake part
-      p.image(this.sprite, segx, segy, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
+      p.image(this.sprite, segx * scaleX, segy * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
     }
 
     //tail
     let tail = this.getTile();
     // Tail; Determine the correct image
-    var pseg = this.body[this.body.length - 2]; // Prev segment
+    pseg = this.body[this.body.length - 2]; // Prev segment
     segx = tail.x;
     segy = tail.y;
     if (pseg.y < segy) {
@@ -174,7 +178,7 @@ export class Snake extends GameSprite {
       tx = 3;
       ty = 3;
     }
-    p.image(this.sprite, segx, segy, scale, scale, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
+    p.image(this.sprite, segx * scaleX, segy * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
   }
 
   private getHead(): Vector {
@@ -217,38 +221,36 @@ export class Snake extends GameSprite {
 
     const newHead = this.getNextPosition(this.body[0]);
     this.body.unshift(newHead);
-    this.locationController.setRealCoord(newHead);
+    this.locationController.unset(newHead.x, newHead.y);
     if (this.grow) {
       this.grow = false;
     } else {
       const deletedTile = this.body.pop();
-      this.locationController.unsetRealCoord(deletedTile);
+      this.locationController.unset(deletedTile.x, deletedTile.y);
     }
     console.log(`snake length ${this.body.length}, isGrow = ${this.grow}`);
   }
 
   getNextPosition(position: Vector): Vector {
-    const scale = this.settings.scale;
-    const width = this.settings.width;
-    const height = this.settings.height;
+    const cols = this.settings.cols;
+    const rows = this.settings.rows;
 
-    let x = position.x + this.xSpeed * scale;
-    let y = position.y + this.ySpeed * scale;
+    let x = position.x + this.xSpeed;
+    let y = position.y + this.ySpeed;
 
-    if (x > width - scale) {
+    // если стены замкнуты
+    if (x >= cols) {
       x = 0;
     }
     if (x < 0) {
-      x = width - scale;
+      x = cols - 1;
     }
-    if (y > height - scale) {
+    if (y >= rows) {
       y = 0;
     }
     if (y < 0) {
-      y = height - scale;
+      y = rows - 1;
     }
-    // x = this.p.constrain(x, 0, width - scale);
-    // y = this.p.constrain(y, 0, height - scale);
 
     return this.p.createVector(x, y);
   }
