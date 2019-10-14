@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "joker-snake",
+      "public": "dist/joker-snake",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

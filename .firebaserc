@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "joker-snake": {
+      "hosting": {
+        "joker-snake": [
+          "joker-snake"
+        ]
+      }
+    }
+  }
+}

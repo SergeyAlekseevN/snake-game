@@ -11,14 +11,14 @@ import {GameController} from "./engine/game.controller";
 })
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
   private p: P5;
-  private isGameStarted: boolean;
-  private score: number;
   private readonly settings: GameSettings;
   private roundTime: number;
   private game: GameController;
-
-  private actions: string[] = [];
   private readonly actionsCapacity = 10;
+
+  actions: string[] = [];
+  isGameStarted: boolean;
+  score: number;
 
   actionHandler = (message: string) => {
     this.actions.push(message);
