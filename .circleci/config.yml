@@ -8,17 +8,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - 'v1-dependencies-{{ checksum "package.json" }}'
-            - v1-dependencies-
+          key: cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: 'npm install'
       - save_cache:
           paths:
             - node_modules
-          key: 'v1-dependencies-{{ checksum "package.json" }}'
+          key: cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: 'Build Project'
           command: 'npm run build'
+      - run:
+          name: "Run unit-tests"
+          command: "npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI"
       - run:
           name: 'Deploy to Firebase Hosting'
           command: './node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN'
