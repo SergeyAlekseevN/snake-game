@@ -8,9 +8,9 @@ import {LoginComponent} from "./login/login.component";
 import {PlayerComponent} from "./player/player.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'start', pathMatch: 'full'},
+  {path: '', redirectTo: 'registration', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
-  {path: 'start', component: PlayerComponent, data: {allowedRoles: ['admin', 'player']}, canActivate: [AuthGuard]},
+  {path: 'registration', component: PlayerComponent, data: {allowedRoles: ['admin', 'player']}, canActivate: [AuthGuard]},
   {path: 'game', component: GameComponent, data: {allowedRoles: ['admin', 'player']}, canActivate: [AuthGuard]},
   {
     path: 'leaderboard',
