@@ -10,11 +10,12 @@ import {GameController} from "./engine/game.controller";
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
-  private p: P5;
   private readonly settings: GameSettings;
+  private readonly actionsCapacity = 7;
+
+  private p: P5;
   private roundTime: number;
   private game: GameController;
-  private readonly actionsCapacity = 10;
 
   actions: string[] = [];
   score: number = 0;
