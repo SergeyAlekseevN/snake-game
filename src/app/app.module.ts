@@ -14,8 +14,9 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {environment} from "../environments/environment";
 import {LoginComponent} from './login/login.component';
-import { PlayerComponent } from './player/player.component';
+import {PlayerComponent} from './player/player.component';
 import {FormsModule} from "@angular/forms";
+import {LeaderboardService} from "./leaderboard/leaderboard.service";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import {FormsModule} from "@angular/forms";
     AngularFireStorageModule,// imports firebase/storage only needed for storage features
     FormsModule,
   ],
-  providers: [],
+  providers: [
+    LeaderboardService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

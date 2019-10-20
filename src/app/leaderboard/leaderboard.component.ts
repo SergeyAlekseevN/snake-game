@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {LeaderboardService, Player} from "./leaderboard.service";
 
 @Component({
   selector: 'app-leaderboard',
@@ -6,23 +7,10 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
+  results: Player[] = [];
 
-  results = [
-    {
-      name: "Сергей",
-      score: 2342
-    },
-    {
-      name: "Василий",
-      score: 1234
-    },
-    {
-      name: "Дмитрий",
-      score: 957
-    }
-  ]
-
-  constructor() {
+  constructor(public leaderboardService: LeaderboardService) {
+    leaderboardService.get().subscribe(results => this.results = results);
   }
 
   ngOnInit() {
