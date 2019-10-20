@@ -44,12 +44,9 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   ngOnDestroy(): void {
     console.log('game.component -> onDestroy');
-    console.log("Stop game");
     if (this.p !== undefined) {
-      console.log("Remove Sketch");
+      console.log("Remove p5 sketch");
       this.p.remove();
-      console.log("Remove Canvas");
-      this.p.noCanvas();
     }
   }
 
