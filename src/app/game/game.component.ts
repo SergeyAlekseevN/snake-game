@@ -13,10 +13,10 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   private readonly settings: GameSettings;
   private readonly actionsCapacity = 7;
 
-  private p: P5;
   private roundTime: number;
   private game: GameController;
 
+  p: P5;
   actions: string[] = [];
   score: number = 0;
 
