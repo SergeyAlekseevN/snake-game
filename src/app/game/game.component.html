@@ -1,5 +1,5 @@
 <div class="game">
-  <div id="left-sidebar">
+  <div id="left-sidebar" *ngIf="p!==null">
     <div class="game-info">
       <h4>Игрок: Сергей</h4>
       <h4>Время:
@@ -9,7 +9,7 @@
     </div>
   </div>
   <div id="canvas"></div>
-  <div id="right-sidebar">
+  <div id="right-sidebar" *ngIf="p!==null">
     <div id="artifact-legend">
       <h4>Артефакты</h4>
       <ul>
