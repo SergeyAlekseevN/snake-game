@@ -17,7 +17,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   private readonly actionsCapacity = 10;
 
   actions: string[] = [];
-  isGameStarted: boolean;
   score: number = 0;
 
   actionHandler = (message: string) => {
@@ -44,7 +43,13 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   ngOnDestroy(): void {
     console.log('game.component -> onDestroy');
-    this.stopGame();
+    console.log("Stop game");
+    if (this.p !== undefined) {
+      console.log("Remove Sketch");
+      this.p.remove();
+      console.log("Remove Canvas");
+      this.p.noCanvas();
+    }
   }
 
   ngAfterContentInit(): void {
@@ -53,17 +58,19 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   ngAfterViewInit(): void {
     console.log('game.component -> afterViewInit');
-    this.startGame();
+    this.initCanvas();
   }
 
   resize(width: number, height: number) {
     console.log(`resize with ${width}x${height}`);
+
     if (height > width) {
-      this.actionHandler("Неверное соотношение сторон.");
+      console.warn(`Неверное соотношение сторон height:${height}, width:${width}`);
       return;
     }
-    this.settings.height = height - 15; //15px margin top
-    this.settings.width = height - 15;
+
+    this.settings.height = height - 20; //15px margin top
+    this.settings.width = height - 20;
 
     this.settings.scaleX = Math.floor(this.settings.width / this.settings.cols);
     this.settings.scaleY = Math.floor(this.settings.height / this.settings.rows);
@@ -75,29 +82,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     this.p.resizeCanvas(this.settings.width, this.settings.height);
   }
 
-  startGame() {
-    console.log("Start game");
-    this.score = 0;
-    this.isGameStarted = true;
-    this.initCanvas();
-  }
-
-  stopGame() {
-    console.log("Stop game");
-    this.isGameStarted = false;
-    if (this.p !== undefined) {
-      console.log("Remove Sketch");
-      this.p.remove();
-      console.log("Remove Canvas");
-      this.p.noCanvas();
-    }
-  }
-
   initCanvas() {
-    if (this.isGameStarted === false) {
-      console.log('game not started;');
-      return;
-    }
     console.log("init canvas");
     if (this.p !== undefined) {
       console.log("Remove Sketch");
@@ -115,27 +100,29 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
     this.p = new P5((p: P5) => {
         p.preload = () => {
-          console.log("preload" + document.getElementById("canvas").textContent);
-
+          console.log("p -> preload");
         };
 
         p.setup = (): void => {
+          console.log("p -> setup");
           p.createCanvas(this.settings.width + 1, this.settings.height + 1).parent('canvas');
           p.frameRate(this.settings.fps);
           p.noCursor();
+          console.log("create game controller.");
           this.game = new GameController(p, this.settings, this.actionHandler);
         };
 
         p.draw = (): void => {
-          if (this.game !== undefined) {
+          if (this.game === undefined) {
+            console.warn("p -> game not initialized!");
+          } else {
             this.game.update(p);
             this.score = this.game.score;
             this.game.draw(p);
-          } else {
-            console.warn("p -> game not initialized!");
           }
+
           // show fps
-          showFps.call(this, p);
+          // showFps.call(this, p);
         };
 
         p.keyPressed = (): void => {
@@ -148,5 +135,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
         };
       }
     );
+    this.resize(window.innerWidth, window.innerHeight);
   }
 }
