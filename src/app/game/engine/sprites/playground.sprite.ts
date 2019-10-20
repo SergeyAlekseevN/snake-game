@@ -23,7 +23,6 @@ export class Playground extends GameSprite {
     const width = this.settings.width;
     const height = this.settings.height;
 
-    console.log(`width=${width} height=${height} scaleX=${scaleX} scaleY=${scaleY} cols=${cols} rows=${rows}`);
     p.background('white');
 
     //клетки поля.
