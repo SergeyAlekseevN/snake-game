@@ -9,7 +9,7 @@ import {GameController} from "./engine/game.controller";
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
+export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
   private p: P5;
   private readonly settings: GameSettings;
   private roundTime: number;
@@ -26,7 +26,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
       this.actions.shift();
     }
   };
-
 
   constructor() {
     this.settings = new GameSettings(800, 800, 32, 32, 12);
@@ -102,7 +101,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit {
           p.createCanvas(this.settings.width + 1, this.settings.height + 1).parent('canvas');
           p.frameRate(this.settings.fps);
           p.noCursor();
-          this.game = new GameController(this.p, this.settings, this.actionHandler);
+          this.game = new GameController(p, this.settings, this.actionHandler);
         };
 
         p.draw = (): void => {
