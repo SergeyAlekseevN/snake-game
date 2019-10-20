@@ -18,7 +18,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   actions: string[] = [];
   isGameStarted: boolean;
-  score: number;
+  score: number = 0;
 
   actionHandler = (message: string) => {
     this.actions.push(message);
@@ -127,11 +127,11 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
         };
 
         p.draw = (): void => {
-          if(this.game!==undefined) {
+          if (this.game !== undefined) {
             this.game.update(p);
             this.score = this.game.score;
             this.game.draw(p);
-          }else {
+          } else {
             console.warn("p -> game not initialized!");
           }
           // show fps
