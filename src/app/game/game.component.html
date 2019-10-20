@@ -1,34 +1,27 @@
-<div *ngIf="!isGameStarted;else showGame" class="welcome-screen">
-  <h1>Snake {{"<?>"}}</h1>
-  <button mat-raised-button (click)="startGame()">Начать игру</button>
-</div>
-<ng-template #showGame>
-  <div class="game">
-    <div id="left-sidebar">
-      <div class="game-info">
-        <h4>Игрок: Сергей</h4>
-        <h4>Время:
-          <app-stopwatch></app-stopwatch>
-        </h4>
-        <h4>Очки: {{score|number:"6."}}</h4>
-      </div>
+<div class="game">
+  <div id="left-sidebar">
+    <div class="game-info">
+      <h4>Игрок: Сергей</h4>
+      <h4>Время:
+        <app-stopwatch></app-stopwatch>
+      </h4>
+      <h4>Очки: {{score|number:"6."}}</h4>
     </div>
-    <div id="canvas"></div>
-    <div id="right-sidebar">
-      <div id="artifact-legend">
-        <h4>Артефакты</h4>
-        <ul>
-          <li>ArrayList</li>
-          <li>Garbage collector</li>
-        </ul>
-      </div>
-      <div id="actions">
-        <h4>Последние действия</h4>
-        <ul>
-          <li *ngFor="let action of actions">{{action}}</li>
-        </ul>
-      </div>
-    </div>
-
   </div>
-</ng-template>
+  <div id="canvas"></div>
+  <div id="right-sidebar">
+    <div id="artifact-legend">
+      <h4>Артефакты</h4>
+      <ul>
+        <li>ArrayList</li>
+        <li>Garbage collector</li>
+      </ul>
+    </div>
+    <div id="actions">
+      <h4>Последние действия</h4>
+      <ul>
+        <li *ngFor="let action of actions">{{action}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
