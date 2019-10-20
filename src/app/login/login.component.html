@@ -1,17 +1,17 @@
 <div *ngIf="auth.user |async as user; else login">
-  <span><img width="32" height="32" [src]="user.photoURL"> {{user.displayName}}</span>
-
-  <pre>{{user.roles|json}}</pre>
-  <button mat-raised-button (click)="auth.signOut()">Sign Out</button>
-
-  <div class="container">
-    <button mat-button routerLink="/game">Игра</button>
-    <button mat-button routerLink="/leaderboard">Зал славы</button>
-    <button mat-button routerLink="/settings">Настройки игры</button>
+  <span>
+    <img width="32" height="32" [src]="user.photoURL"> {{user.displayName}}
+    <b *ngIf="user.roles">[{{user.roles.join(", ")}}]</b>
+  </span>
+  <button mat-stroked-button (click)="auth.signOut()">Sign Out</button>
+  <hr>
+  <div>
+    <button mat-stroked-button routerLink="/start">Начальный экран</button>
+    <button mat-stroked-button routerLink="/game">Игра</button>
+    <button mat-stroked-button routerLink="/leaderboard">Зал славы</button>
+    <button mat-stroked-button routerLink="/settings">Настройки игры</button>
   </div>
 </div>
 <ng-template #login>
   <button mat-raised-button (click)="auth.googleSignIn()">Login with Google</button>
-
-<!--  <app-user-form></app-user-form>-->
 </ng-template>
