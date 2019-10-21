@@ -3,6 +3,7 @@ import * as P5 from 'p5';
 import * as p5 from 'p5';
 import {GameSettings} from "./engine/game.settings";
 import {GameController} from "./engine/game.controller";
+import {GameService} from "./game.service";
 
 @Component({
   selector: 'app-game',
@@ -27,7 +28,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     }
   };
 
-  constructor() {
+  constructor(public gameService: GameService) {
     console.log("game.component -> constructor");
     this.settings = new GameSettings(800, 800, 32, 32, 12);
   }
