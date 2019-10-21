@@ -17,6 +17,7 @@ import {LoginComponent} from './login/login.component';
 import {PlayerComponent} from './player/player.component';
 import {FormsModule} from "@angular/forms";
 import {LeaderboardService} from "./leaderboard/leaderboard.service";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {LeaderboardService} from "./leaderboard/leaderboard.service";
     LeaderboardComponent,
     SettingsComponent,
     LoginComponent,
-    PlayerComponent
+    PlayerComponent,
+    ProfileComponent
   ],
   imports: [
     MaterialModule,
