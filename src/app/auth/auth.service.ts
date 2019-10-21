@@ -6,7 +6,7 @@ import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/firestor
 
 import {Observable, of} from "rxjs";
 import {switchMap} from "rxjs/operators";
-import {User} from "./user.model";
+import {User} from "../db/user.model";
 import {auth} from "firebase/app";
 import AuthProvider = firebase.auth.AuthProvider;
 
