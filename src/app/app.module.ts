@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {GameComponent} from './game/game.component';
@@ -15,7 +15,6 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {environment} from "../environments/environment";
 import {LoginComponent} from './user/login/login.component';
 import {RegistrationComponent} from './game/registration/registration.component';
-import {FormsModule} from "@angular/forms";
 import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
 
@@ -38,6 +37,7 @@ import {ProfileComponent} from './user/profile/profile.component';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    ReactiveFormsModule,
     FormsModule,
   ],
   providers: [
