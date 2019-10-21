@@ -3,8 +3,8 @@ import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firest
 import {Observable} from "rxjs";
 
 export interface Player {
+  uid: string;
   name: string;
-  phone: string;
   score: number;
 }
 
@@ -17,18 +17,14 @@ export class LeaderboardService {
 
   constructor(private afs: AngularFirestore) {
     this.reference = afs.collection<Player>('leaderboard', ref => {
-      return ref.orderBy('score','desc');
+      return ref
+        .orderBy('score', 'desc')
+        .limit(50);
     });
     this.leaders = this.reference.valueChanges();
   }
 
-  create() {
-  }
-
-  update() {
-  }
-
-  get(): Observable<Player[]> {
+  getLeaders(): Observable<Player[]> {
     return this.leaders;
   }
 }

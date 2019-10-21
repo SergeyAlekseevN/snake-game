@@ -10,10 +10,9 @@ export class LeaderboardComponent implements OnInit {
   results: Player[] = [];
 
   constructor(public leaderboardService: LeaderboardService) {
-    leaderboardService.get().subscribe(results => this.results = results);
+    leaderboardService.getLeaders().subscribe(results => this.results = results);
   }
 
   ngOnInit() {
-
   }
 }
