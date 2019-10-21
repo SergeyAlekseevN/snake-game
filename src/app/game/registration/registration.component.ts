@@ -11,7 +11,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class RegistrationComponent implements OnInit {
   playerForm: FormGroup;
 
-
   constructor(
     private gameService: GameService,
     private route: ActivatedRoute,
