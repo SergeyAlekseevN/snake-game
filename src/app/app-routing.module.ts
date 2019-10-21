@@ -1,16 +1,21 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LeaderboardComponent} from './leaderboard/leaderboard.component';
+import {LeaderboardComponent} from './game/leaderboard/leaderboard.component';
 import {GameComponent} from './game/game.component';
-import {SettingsComponent} from './settings/settings.component';
-import {AuthGuard} from "./core/auth.guard";
-import {LoginComponent} from "./login/login.component";
-import {PlayerComponent} from "./player/player.component";
+import {SettingsComponent} from './game/settings/settings.component';
+import {AuthGuard} from "./auth/auth.guard";
+import {LoginComponent} from "./user/login/login.component";
+import {RegistrationComponent} from "./game/registration/registration.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'registration', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
-  {path: 'registration', component: PlayerComponent, data: {allowedRoles: ['admin', 'player']}, canActivate: [AuthGuard]},
+  {
+    path: 'registration',
+    component: RegistrationComponent,
+    data: {allowedRoles: ['admin', 'player']},
+    canActivate: [AuthGuard]
+  },
   {path: 'game', component: GameComponent, data: {allowedRoles: ['admin', 'player']}, canActivate: [AuthGuard]},
   {
     path: 'leaderboard',
