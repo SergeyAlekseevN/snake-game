@@ -1,6 +1,6 @@
 .game {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
 }
 
 .game-info {
@@ -14,10 +14,17 @@ h4 {
   margin: 10px;
 }
 
+#canvas {
+  margin-top: 15px;
+}
+
 #left-sidebar {
-  min-width: 300px;
+  min-width: 20%;
+  margin: 15px;
+
 }
 
 #right-sidebar {
-  min-width: 300px;
+  min-width: 20%;
+  margin: 15px;
 }

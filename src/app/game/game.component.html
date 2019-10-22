@@ -1,11 +1,13 @@
 <div class="game">
   <div id="left-sidebar" *ngIf="p!==null">
     <div class="game-info">
+      <button routerLink="registration">Завершить игру</button>
       <h4>Игрок: Сергей</h4>
       <h4>Время:
         <app-stopwatch></app-stopwatch>
       </h4>
       <h4>Очки: {{score|number:"6."}}</h4>
+      <h4>Количество жизней: 3</h4>
     </div>
   </div>
   <div id="canvas"></div>
