@@ -1,9 +1,9 @@
 export interface Game {
-  online?: boolean;
+  state?: string;
   gameId?: string;
   playerId?: string;
   deviceId?: string;
-  start?: Date;
+  start?: Date;// TODO: 22.10.2019 Sergey Alekseev: firebase возвращает Timestamp
   score?: number;
-  stop?: Date;
+  stop?: Date;// TODO: 22.10.2019 Sergey Alekseev: firebase возвращает Timestamp
 }

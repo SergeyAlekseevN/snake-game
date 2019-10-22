@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/firestore";
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/firestore";
 import {Player} from "../db/player.model";
 import {Game} from "../db/game.model";
 import {map, switchMap} from "rxjs/operators";
@@ -18,7 +18,7 @@ export class GameService {
 
   async closeOpenedGameSessionsByDeviceId(deviceId: string) {
     const gamesToClose: Observable<Game> = this.db.collection('games', ref => ref
-      .where('online', "==", 'true')
+      .where('state', "==", 'online')
       .where('deviceId', '==', deviceId))
       .get()
       .pipe(
@@ -28,7 +28,7 @@ export class GameService {
       );
 
     return gamesToClose.pipe(
-      map(game => this.db.doc(`games/${game.gameId}`).set({stop: new Date(), online: false}, {merge: true}))
+      map(game => this.db.doc(`games/${game.gameId}`).set({stop: new Date(), state: 'offline'}, {merge: true}))
     ).toPromise();
   }
 
@@ -123,7 +123,7 @@ export class GameService {
     console.log(`For player ${playerId} on device ${deviceId} created new game session ${gameId}.`);
     // TODO: 21.10.2019 Sergey Alekseev: проверить что такой записи ещё нет
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
-    return gameRef.set({deviceId, gameId, playerId, start, online: true});
+    return gameRef.set({deviceId, gameId, playerId, start, state: 'online'});
   }
 
   /**
@@ -135,6 +135,12 @@ export class GameService {
     const gameId = this.getGameId();
     this.deleteGameId();
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
-    return gameRef.set({score: score, stop: new Date(), online: false}, {merge: true});
+    return gameRef.set({score: score, stop: new Date(), state: 'offline'}, {merge: true});
+  }
+
+  onlineGames(): Observable<Game[]> {
+    const gamesReg: AngularFirestoreCollection<Game> = this.db
+      .collection('games', ref => ref.where('state', '==', 'online'));
+    return gamesReg.valueChanges()
   }
 }
