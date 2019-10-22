@@ -72,24 +72,6 @@ export class Food extends GameSprite {
       console.log(`shape= ${this.shape} color=${this.color}`)
     }
   }
-
-  private skins: Set<string> = new Set<string>();
-
-  setRandomFreeSkin() {
-    let newShape;
-    let newColor;
-    do {
-      newShape = this.p.floor(this.p.random(4));
-      newColor = this.p.floor(this.p.random(4));
-    } while (this.skins.has(`${newShape}:${newColor}`));
-
-    this.skins.delete(`${this.shape}:${this.color}`);
-    this.skins.add(`${newShape}:${newColor}`);
-
-    this.shape = newShape;
-    this.color = newColor;
-  }
-
   update(p: p5): void {
     // only self-update.
   }
