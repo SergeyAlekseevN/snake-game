@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreDocument} from "@angular/fire/firestore";
 import {Player} from "../db/player.model";
 import {Game} from "../db/game.model";
+import {map, switchMap} from "rxjs/operators";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,22 @@ export class GameService {
    * При завершении игры удаляем токен
    */
   constructor(private db: AngularFirestore) {
+  }
+
+  async closeOpenedGameSessionsByDeviceId(deviceId: string) {
+    const gamesToClose: Observable<Game> = this.db.collection('games', ref => ref
+      .where('online', "==", 'true')
+      .where('deviceId', '==', deviceId))
+      .get()
+      .pipe(
+        switchMap(value => {
+          return value.docs.map(value => value.data() as Game);
+        })
+      );
+
+    return gamesToClose.pipe(
+      map(game => this.db.doc(`games/${game.gameId}`).set({stop: new Date(), online: false}, {merge: true}))
+    ).toPromise();
   }
 
   /**
@@ -30,23 +48,53 @@ export class GameService {
    * Идентификатор игры.
    * При каждом вызове перезаписывается новый.
    */
-  gameId(): string {
+  createGameId(): string {
     let token = this.db.createId();
     localStorage.setItem('gameId', token);
     return token;
   }
 
-  playerId(name: string, phone: string): string {
-    const playerId = "";
-    /**
-     * TODO playerId
-     * 1. поискать по номеру телефона запись
-     * 2. если есть - вернуть ID
-     * 3. если нет то создать, сохранить и вернуть ID
-     */
-    const playerRef: AngularFirestoreDocument<Player> = this.db.doc(`players/${playerId}`);
+  getGameId(): string {
+    return localStorage.getItem('gameId');
+  }
 
-    return "";
+  deleteGameId(): void {
+    localStorage.removeItem('gameId');
+  }
+
+  /**
+   * 1. поискать по номеру телефона запись
+   * 2. если есть - вернуть ID
+   * 3. если нет то создать, сохранить и вернуть ID
+   */
+  async playerId(name: string, phone: string): Promise<string> {
+    console.log("try find player by phone=" + phone);
+    let player: Player = null;
+    await this.db.collection('players', ref => ref.where('phone', '==', phone).limit(1))
+      .get()
+      .toPromise()
+      .then(value => {
+        if (value.empty) {
+          console.log(`Player with phone ${phone} does not exist. Create new Player.`)
+        } else {
+          player = value.docs.pop().data() as Player;
+          console.log(`Player with phone ${phone} found. playerId=${player.playerId}`);
+        }
+      })
+      .catch(reason => console.warn("game.service-> find player by phone. Error: " + reason));
+
+    if (player) {
+      return player.playerId;
+    } else {
+      const playerId = this.db.createId();
+      const newPlayer: Player = {playerId: playerId, name: name, phone: phone, bestScore: 0, gameCount: 0};
+
+      console.log(`create player with playerId=${playerId}`);
+      await this.db.collection('players').doc(playerId).set(newPlayer)
+        .then(() => console.log(`Player ${name} saved.`))
+        .catch(reason => console.warn(`Error with saving new player ${name}. Reason: ${reason}.`));
+      return playerId;
+    }
   }
 
   /**
@@ -55,15 +103,27 @@ export class GameService {
    * 2. Сохраняем в локальном кеше браузера
    * 3. Создаём сессию в базе-данных
    */
-  async startGameSession(phone: string, name: string, startTimestamp: number) {
+  async startGameSession(phone: string, name: string, start: Date) {
+    console.log(`before start new game session close opened earlier game sessions.`);
+    await this.closeOpenedGameSessionsByDeviceId(this.deviceId())
+      .then(() => console.log(`Successfully closed opened games.`))
+      .catch(reason => console.warn(`Error with closing opened games. ${reason}`));
+
     console.log('gameSession -> start session');
-    let playerId = this.playerId(name, phone);
+    let playerId = null;
+    await this.playerId(name, phone)
+      .then(id => playerId = id)
+      .catch(reason => {
+        console.warn(`Can't get playerId. reason: ${reason}`);
+        throw new Error(`Can't create playerId. ${reason}`);
+      });
+
     let deviceId = this.deviceId();
-    let gameId = this.gameId();
+    let gameId = this.createGameId();
+    console.log(`For player ${playerId} on device ${deviceId} created new game session ${gameId}.`);
     // TODO: 21.10.2019 Sergey Alekseev: проверить что такой записи ещё нет
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
-    return gameRef.set({deviceId, gameId, playerId, startTimestamp})
-      .catch(reason => console.warn("gameDAO -> can't save game session.", +reason));
+    return gameRef.set({deviceId, gameId, playerId, start, online: true});
   }
 
   /**
@@ -84,7 +144,10 @@ export class GameService {
    * 2. Удаляем из локального кеша
    * 3. Закрываем его в базе данных
    */
-  stopGameSession() {
-    // TODO: 21.10.2019 Sergey Alekseev:
+  stopGameSession(score: number) {
+    const gameId = this.getGameId();
+    this.deleteGameId();
+    const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
+    gameRef.set({score: score, stop: new Date(), online: false}, {merge: true});
   }
 }

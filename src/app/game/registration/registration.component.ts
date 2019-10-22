@@ -37,9 +37,10 @@ export class RegistrationComponent implements OnInit {
     console.log("registration -> submit form");
     const phone = this.playerForm.get('phone').value;
     const name = this.playerForm.get('name').value;
-    const startTimestamp = Date.now();
+    const start = new Date();
 
-    this.gameService.startGameSession(phone, name, startTimestamp)
+
+    this.gameService.startGameSession(phone, name, start)
       .then(() => console.log("registration -> redirect to game"))
       .then(() => this.router.navigate(['/game']))
       .catch(reason => console.warn("registration -> can't start game. " + reason));
