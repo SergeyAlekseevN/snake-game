@@ -17,10 +17,12 @@ import {LoginComponent} from './user/login/login.component';
 import {RegistrationComponent} from './game/registration/registration.component';
 import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
+import {TimerComponent} from "./game/timer.component";
 
 @NgModule({
   declarations: [
     Stopwatch,
+    TimerComponent,
     AppComponent,
     GameComponent,
     LeaderboardComponent,
