@@ -127,27 +127,14 @@ export class GameService {
   }
 
   /**
-   * 1. Проверяем в локальном кеше наличие игровых сессий
-   * 2. Проверяем в базе данных актуальность этих сессий
-   * 3. Удаляем из локального кеша неактивные
-   */
-  hasGameSession(): boolean {
-    /**
-     * проверяем незакрытые сессии по deviceId
-     */
-    // TODO: 21.10.2019 Sergey Alekseev:
-    return false;
-  }
-
-  /**
    * 1. Получаем токен сессии
    * 2. Удаляем из локального кеша
    * 3. Закрываем его в базе данных
    */
-  stopGameSession(score: number) {
+  async stopGameSession(score: number) {
     const gameId = this.getGameId();
     this.deleteGameId();
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
-    gameRef.set({score: score, stop: new Date(), online: false}, {merge: true});
+    return gameRef.set({score: score, stop: new Date(), online: false}, {merge: true});
   }
 }
