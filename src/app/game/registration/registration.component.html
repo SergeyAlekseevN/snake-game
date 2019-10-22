@@ -1,19 +1,27 @@
-<h2>🐍 Joker&lt;Snake&gt;</h2>
-<p>🎮 Добро пожаловать в игру Joker&lt;Snake&gt;!</p>
-<p>🎯 Если ты знаешь Java, то ты победишь!</p>
-<p>🏆 Лучшие игроки получат призы!</p>
-<form class="example-container" (ngSubmit)="onSubmit()" [formGroup]="playerForm">
-  <mat-form-field appearance="outline">
-    <mat-label>Как тебя зовут?</mat-label>
-    <input maxlength="25" formControlName="name" matInput placeholder="Твоё имя">
-    <mat-error>От 3 до 25 букв.</mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Мобильный телефон</mat-label>
-    <input maxlength="25" formControlName="phone" matInput placeholder="+7(___)___-__-__">
-    <mat-error>Телефон в международном формате.</mat-error>
-    <mat-hint>При выигрыше мы тебе пришлём sms-уведомление для получения приза!</mat-hint>
-  </mat-form-field>
-  <br><br>
-  <button style="height: 3em;" type="submit" [disabled]="!playerForm.valid">Играть</button>
-</form>
+<div class="container">
+  <div>
+    <h2>🐍 Joker&lt;Snake&gt;</h2>
+    <p>🎮 Добро пожаловать в игру Joker&lt;Snake&gt;!</p>
+    <p>🎯 Если ты знаешь Java, то ты победишь!</p>
+    <p>🏆 Лучшие игроки получат призы!</p>
+    <form class="example-container" (ngSubmit)="onSubmit()" [formGroup]="playerForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Как тебя зовут?</mat-label>
+        <input maxlength="25" formControlName="name" matInput placeholder="Твоё имя">
+        <mat-error>От 3 до 25 букв.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Мобильный телефон</mat-label>
+        <input maxlength="25" formControlName="phone" matInput placeholder="+7(___)___-__-__">
+        <mat-error>Телефон в международном формате.</mat-error>
+        <mat-hint>При выигрыше мы тебе пришлём sms-уведомление для получения приза!</mat-hint>
+      </mat-form-field>
+      <br><br>
+      <button style="height: 3em;" type="submit" [disabled]="!playerForm.valid">Играть</button>
+    </form>
+    <div class="example-container">
+      <br>
+      <button style="height: 3em;" routerLink="/leaderboard"> Топ игроков</button>
+    </div>
+  </div>
+</div>
