@@ -44,7 +44,9 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   }
 
   ngOnDestroy(): void {
-    this.gameService.stopGameSession(this.score);
+    this.gameService.stopGameSession(this.score)
+      .then(() => console.log("current game stopped"))
+      .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
     console.log('game.component -> onDestroy');
     if (this.p !== undefined) {
       console.log("Remove p5 sketch");
