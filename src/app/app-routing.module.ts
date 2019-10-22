@@ -6,7 +6,6 @@ import {SettingsComponent} from './game/settings/settings.component';
 import {AuthGuard} from "./auth/auth.guard";
 import {LoginComponent} from "./user/login/login.component";
 import {RegistrationComponent} from "./game/registration/registration.component";
-import {GameGuard} from "./game/game.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'registration', pathMatch: 'full'},
@@ -21,7 +20,7 @@ const routes: Routes = [
     path: 'game',
     component: GameComponent,
     data: {allowedRoles: ['admin', 'player']},
-    canActivate: [AuthGuard, GameGuard]
+    canActivate: [AuthGuard, /*GameGuard*/]// TODO: 22.10.2019 Sergey Alekseev: расскоментировать для прода
   },
   {
     path: 'leaderboard',
@@ -29,7 +28,8 @@ const routes: Routes = [
     data: {allowedRoles: ['admin', 'player']},
     canActivate: [AuthGuard]
   },
-  {path: 'settings', component: SettingsComponent, data: {allowedRoles: ['admin']}, canActivate: [AuthGuard]}
+  {path: 'settings', component: SettingsComponent, data: {allowedRoles: ['admin']}, canActivate: [AuthGuard]},
+  {path: '**', redirectTo: '/registration'}
 ];
 
 @NgModule({
