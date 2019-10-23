@@ -47,10 +47,12 @@ export class Snake extends GameSprite {
      */
     let h = this.p.createVector(0, 0);
     this.body.unshift(h);
+    this.locationController.set(h.x, h.y);
 
     for (let i = 0; i < length - 1; i++) {
       h = this.getNextPosition(h);
       this.body.unshift(h);
+      this.locationController.set(h.x, h.y);
     }
   }
 
@@ -204,10 +206,6 @@ export class Snake extends GameSprite {
       // Draw the image of the snake part
       p.image(this.sprite, currentX * scaleX, currentY * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
     }
-  }
-
-  growSnake() {
-
   }
 
   checkCurrentStep() {
