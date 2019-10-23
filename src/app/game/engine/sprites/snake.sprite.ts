@@ -87,15 +87,15 @@ export class Snake extends GameSprite {
 
 
     for (let i = 0; i < this.body.length; i++) { //нулевой элемент у нас голова
-      let segx;
-      let segy;
+      let currentX;
+      let currentY;
 
       if (i === 0) {
         // head
         let head = this.body[0];
 
-        segx = head.x;
-        segy = head.y;
+        currentX = head.x;
+        currentY = head.y;
         // Head; Determine the correct image
 
         if (this.direction == Direction.UP) {
@@ -120,29 +120,29 @@ export class Snake extends GameSprite {
         let tail = this.body[i];
         // Tail; Determine the correct image
         prevSegment = this.body[i - 1]; // Prev segment
-        segx = tail.x;
-        segy = tail.y;
-        if (prevSegment.y < segy) {
+        currentX = tail.x;
+        currentY = tail.y;
+        if (prevSegment.y < currentY) {
           // Up
           tx = 3;
           ty = 2;
-        } else if (prevSegment.x > segx) {
+        } else if (prevSegment.x > currentX) {
           // Right
           tx = 4;
           ty = 2;
-        } else if (prevSegment.y > segy) {
+        } else if (prevSegment.y > currentY) {
           // Down
           tx = 4;
           ty = 3;
-        } else if (prevSegment.x < segx) {
+        } else if (prevSegment.x < currentX) {
           // Left
           tx = 3;
           ty = 3;
         }
       } else {
         const segment = this.body[i];
-        segx = segment.x;
-        segy = segment.y;
+        currentX = segment.x;
+        currentY = segment.y;
         // Sprite column and row that gets calculated
         tx = 0;
         ty = 0;
@@ -150,30 +150,27 @@ export class Snake extends GameSprite {
         // Body; Determine the correct image
         prevSegment = this.body[i - 1];
         let nextSegment = this.body[i + 1]; // Next segment
-        if (
-          prevSegment.x < segx && nextSegment.x > segx ||
-          nextSegment.x < segx && prevSegment.x > segx) {
+        if (prevSegment.y == currentY && nextSegment.y == currentY) {
           // Horizontal Left-Right
           tx = 1;
           ty = 0;
-        } else if (prevSegment.x < segx && nextSegment.y > segy || nextSegment.x < segx && prevSegment.y > segy) {
-          // Angle Left-Down
-          console.log("!!!!!!!!!!!!!!!left-down");
-          tx = 2;
-          ty = 0;
-        } else if (prevSegment.y < segy && nextSegment.y > segy || nextSegment.y < segy && prevSegment.y > segy) {
+        } else if (prevSegment.x == currentX && nextSegment.x == currentX) {
           // Vertical Up-Down
           tx = 2;
           ty = 1;
-        } else if (prevSegment.y < segy && nextSegment.x < segx || nextSegment.y < segy && prevSegment.x < segx) {
+        } else if (prevSegment.x < currentX && nextSegment.y > currentY || nextSegment.x < currentX && prevSegment.y > currentY) {
+          // Angle Left-Down
+          tx = 2;
+          ty = 0;
+        } else if (prevSegment.y < currentY && nextSegment.x < currentX || nextSegment.y < currentY && prevSegment.x < currentX) {
           // Angle Top-Left
           tx = 2;
           ty = 2;
-        } else if (prevSegment.x > segx && nextSegment.y < segy || nextSegment.x > segx && prevSegment.y < segy) {
+        } else if (prevSegment.x > currentX && nextSegment.y < currentY || nextSegment.x > currentX && prevSegment.y < currentY) {
           // Angle Right-Up
           tx = 0;
           ty = 1;
-        } else if (prevSegment.y > segy && nextSegment.x > segx || nextSegment.y > segy && prevSegment.x > segx) {
+        } else if (prevSegment.y > currentY && nextSegment.x > currentX || nextSegment.y > currentY && prevSegment.x > currentX) {
           // Angle Down-Right
           tx = 0;
           ty = 0;
@@ -181,7 +178,7 @@ export class Snake extends GameSprite {
       }
 
       // Draw the image of the snake part
-      p.image(this.sprite, segx * scaleX, segy * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
+      p.image(this.sprite, currentX * scaleX, currentY * scaleY, scaleX, scaleY, tx * spriteScaleX, ty * spriteScaleY, spriteScaleX, spriteScaleY);
     }
   }
 
