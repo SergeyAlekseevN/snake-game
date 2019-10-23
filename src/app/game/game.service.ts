@@ -79,22 +79,23 @@ export class GameService {
   async playerId(name: string, phone: string): Promise<string> {
     console.log("try find player by phone=" + phone);
     let player: Player = null;
-    await this.db.collection('players', ref => ref.where('phone', '==', phone).limit(1))
-      .get()
-      .toPromise()
-      .then(value => {
-        if (value.empty) {
-          console.log(`Player with phone ${phone} does not exist. Create new Player.`)
-        } else {
-          player = value.docs.pop().data() as Player;
-          console.log(`Player with phone ${phone} found. playerId=${player.playerId}`);
-        }
-      })
-      .catch(reason => console.warn("game.service-> find player by phone. Error: " + reason));
+    if (phone !== undefined && phone !== null && phone.length > 0) {
+      await this.db.collection('players', ref => ref.where('phone', '==', phone).limit(1))
+        .get()
+        .toPromise()
+        .then(value => {
+          if (!value.empty) {
+            player = value.docs.pop().data() as Player;
+          }
+        })
+        .catch(reason => console.warn("game.service-> find player by phone. Error: " + reason));
+    }
 
     if (player) {
+      console.log(`Player with phone ${phone} found. playerId=${player.playerId}`);
       return player.playerId;
     } else {
+      console.log(`Player with phone ${phone} does not exist. Create new Player.`)
       const playerId = this.db.createId();
       const newPlayer: Player = {playerId: playerId, name: name, phone: phone, bestScore: 0, gameCount: 0};
 
