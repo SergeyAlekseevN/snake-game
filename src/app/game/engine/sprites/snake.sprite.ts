@@ -78,7 +78,8 @@ export class Snake extends GameSprite {
      * Если у текущего элемента нет предыдущего то это голова. Отрисуем как годову.
      * Если у текущего элемента нет следующего то это хвост. Отрисуем его как хвост в том направлении в котором он есть.
      */
-
+    const cols = this.settings.cols;
+    const rows = this.settings.rows;
 
     const scaleX = this.settings.scaleX;
     const scaleY = this.settings.scaleY;
@@ -122,19 +123,27 @@ export class Snake extends GameSprite {
         prevSegment = this.body[i - 1]; // Prev segment
         currentX = tail.x;
         currentY = tail.y;
-        if (prevSegment.y < currentY) {
+        if (
+          currentY == prevSegment.y + 1 ||
+          currentY == 0 && prevSegment.y == rows - 1) {
           // Up
           tx = 3;
           ty = 2;
-        } else if (prevSegment.x > currentX) {
-          // Right
-          tx = 4;
-          ty = 2;
-        } else if (prevSegment.y > currentY) {
+        } else if (
+          currentY == prevSegment.y - 1 ||
+          currentY != 0 && prevSegment.y == 0) {
           // Down
           tx = 4;
           ty = 3;
-        } else if (prevSegment.x < currentX) {
+        } else if (
+          currentX == prevSegment.x - 1 ||
+          currentX == cols - 1 && prevSegment.x == 0) {
+          // Right
+          tx = 4;
+          ty = 2;
+        } else if (
+          currentX == prevSegment.x + 1 ||
+          currentX == 0 && prevSegment.x == cols - 1) {
           // Left
           tx = 3;
           ty = 3;
@@ -158,19 +167,27 @@ export class Snake extends GameSprite {
           // Vertical Up-Down
           tx = 2;
           ty = 1;
-        } else if (prevSegment.x < currentX && nextSegment.y > currentY || nextSegment.x < currentX && prevSegment.y > currentY) {
+        } else if (
+          prevSegment.x + 1 == currentX && nextSegment.y - 1 == currentY ||
+          nextSegment.x + 1 == currentX && prevSegment.y - 1 == currentY) {
           // Angle Left-Down
           tx = 2;
           ty = 0;
-        } else if (prevSegment.y < currentY && nextSegment.x < currentX || nextSegment.y < currentY && prevSegment.x < currentX) {
+        } else if (
+          prevSegment.y + 1 == currentY && nextSegment.x + 1 == currentX ||
+          nextSegment.y + 1 == currentY && prevSegment.x + 1 == currentX) {
           // Angle Top-Left
           tx = 2;
           ty = 2;
-        } else if (prevSegment.x > currentX && nextSegment.y < currentY || nextSegment.x > currentX && prevSegment.y < currentY) {
+        } else if (
+          prevSegment.x - 1 == currentX && nextSegment.y + 1 == currentY ||
+          nextSegment.x - 1 == currentX && prevSegment.y + 1 == currentY) {
           // Angle Right-Up
           tx = 0;
           ty = 1;
-        } else if (prevSegment.y > currentY && nextSegment.x > currentX || nextSegment.y > currentY && prevSegment.x > currentX) {
+        } else if (
+          prevSegment.y - 1 == currentY && nextSegment.x - 1 == currentX ||
+          nextSegment.y - 1 == currentY && prevSegment.x - 1 == currentX) {
           // Angle Down-Right
           tx = 0;
           ty = 0;
