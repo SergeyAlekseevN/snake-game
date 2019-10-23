@@ -7,10 +7,10 @@ import {LeaderboardService, Player} from "./leaderboard.service";
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
-  results: Player[] = [];
+  players: Player[] = [];
 
   constructor(public leaderboardService: LeaderboardService) {
-    leaderboardService.getLeaders().subscribe(results => this.results = results);
+    leaderboardService.getLeaders().subscribe(results => this.players = results);
   }
 
   ngOnInit() {
