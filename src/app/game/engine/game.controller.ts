@@ -35,7 +35,10 @@ export class GameController extends GameSprite {
     this.playground = new Playground(this.p, this.settings);
     this.snake = new Snake(this.p, this.settings, this.locationController);
     this.snake.initSnake(4, p.createVector(4, 0));
-
+    this.snake.onSelfEat = () => {
+      this.score = -3;
+      this.actionLogger("откусили хвост", "red", '-3');
+    };
     this.loadFood(7);
   }
 

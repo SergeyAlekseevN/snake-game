@@ -20,6 +20,7 @@ export class Snake extends GameSprite {
 
   private isMoving: boolean = false;
   private isOpenMouth: boolean = false;
+  public onSelfEat: () => void;
 
   constructor(public p: p5, public settings: GameSettings, public locationController: LocationController) {
     super(p);
@@ -322,6 +323,7 @@ export class Snake extends GameSprite {
 
       let distance = this.p.dist(this.body[0].x, this.body[0].y, tailPosition.x, tailPosition.y);
       if (distance < 1) {
+        this.onSelfEat();
         console.log(`slice snake`);
         this.body = this.body.slice(0, this.initialLength);
       }
