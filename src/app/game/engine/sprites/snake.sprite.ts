@@ -12,7 +12,7 @@ export class Snake extends GameSprite {
   private readonly sprite;
   private xSpeed = 1;
   private ySpeed = 0;
-  private direction: Direction;
+  private direction: Direction = Direction.RIGHT;
   private initialLength;
 
   private body: Vector[] = [];
@@ -98,21 +98,19 @@ export class Snake extends GameSprite {
         segy = head.y;
         // Head; Determine the correct image
 
-        // Previous segment
-        let nseg = this.body[1]; // Next segment
-        if (segy < nseg.y) {
+        if (this.direction == Direction.UP) {
           // Up
           tx = 3;
           ty = 0;
-        } else if (segx > nseg.x) {
+        } else if (this.direction == Direction.RIGHT) {
           // Right
           tx = 4;
           ty = 0;
-        } else if (segy > nseg.y) {
+        } else if (this.direction == Direction.DOWN) {
           // Down
           tx = 4;
           ty = 1;
-        } else if (segx < nseg.x) {
+        } else if (this.direction == Direction.LEFT) {
           // Left
           tx = 3;
           ty = 1;
@@ -160,6 +158,7 @@ export class Snake extends GameSprite {
           ty = 0;
         } else if (prevSegment.x < segx && nextSegment.y > segy || nextSegment.x < segx && prevSegment.y > segy) {
           // Angle Left-Down
+          console.log("!!!!!!!!!!!!!!!left-down");
           tx = 2;
           ty = 0;
         } else if (prevSegment.y < segy && nextSegment.y > segy || nextSegment.y < segy && prevSegment.y > segy) {
