@@ -4,6 +4,8 @@ import * as p5 from 'p5';
 import {GameSettings} from "./engine/game.settings";
 import {GameController} from "./engine/game.controller";
 import {GameService} from "./game.service";
+import {Player} from "../db/player.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-game',
@@ -13,13 +15,18 @@ import {GameService} from "./game.service";
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
   private readonly settings: GameSettings;
   private readonly actionsCapacity = 7;
-
+  private isInitedComponent = false;
   private roundTime: number;
   private game: GameController;
+  private player: Observable<Player>;
 
   p: P5;
   actions: string[] = [];
   score: number = 0;
+
+
+  lives: number = 0;
+  topic: string;
 
   actionHandler = (message: string) => {
     this.actions.push(message);
@@ -28,15 +35,22 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     }
   };
 
+
   constructor(public gameService: GameService) {
     console.log("game.component -> constructor");
     this.settings = new GameSettings(800, 800, 32, 32, 6);
+    this.player = this.gameService.getCurrentPlayer();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     console.log(`game.component -> onResize ${event.target.innerWidth} x ${event.target.innerHeight}`);
     this.resize(event.target.innerWidth, event.target.innerHeight);
+  }
+  @HostListener('window:beforeunload',['$event'])
+  beforeUnload(event){
+    this.ngOnDestroy();
+    event.stopPropagation();
   }
 
   ngOnInit(): void {
@@ -61,6 +75,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   ngAfterViewInit(): void {
     console.log('game.component -> afterViewInit');
     this.initCanvas();
+    this.isInitedComponent = true;
   }
 
   resize(width: number, height: number) {
@@ -115,11 +130,13 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
         };
 
         p.draw = (): void => {
-          if (this.game === undefined) {
+          if (this.game === undefined || this.isInitedComponent == false) {
             console.warn("p -> game not initialized!");
           } else {
             this.game.update(p);
             this.score = this.game.score;
+            this.topic = this.game.topic;
+            this.lives = this.game.lives;
             this.game.draw(p);
           }
 

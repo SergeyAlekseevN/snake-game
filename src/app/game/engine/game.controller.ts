@@ -16,10 +16,17 @@ export class GameController extends GameSprite {
   private readonly playground: Playground;
 
   score: number = 0;
+  lives: number = 3;
+  topic: string = "no topic";
+
   private isPaused: boolean = true;
   private readonly actionLogger: (message: string) => void;
 
-  constructor(public p: p5, public settings: GameSettings, actionHandler: (message: string) => void) {
+  constructor(
+    public p: p5,
+    public settings: GameSettings,
+    actionHandler: (message: string) => void
+  ) {
     super(p);
     console.log("constructor of game controller");
     this.actionLogger = actionHandler;
@@ -30,33 +37,43 @@ export class GameController extends GameSprite {
     this.snake.initSnake(4, p.createVector(4, 0));
 
     this.loadFood(7);
-
   }
 
   loadFood(count: number) {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < count; i++) {
       let food = new Food(this.p, this.settings, this.locationController);
       food.putOnNewPlace(this.locationController.getRandomFreeCell());
       const randomFreeSkin = this.skinsController.getRandomFreeSkin(food);
       food.color = randomFreeSkin.color;
       food.shape = randomFreeSkin.shape;
+      food.text = "text";
       this.foods.push(food);
     }
   }
 
   update(p: p5): void {
+
     if (this.isPaused) {
       const foods = this.foods.filter((food, index) => this.snake.isFoodEaten(food.coord));
 
       if (foods.length > 0) {
-        this.snake.growUp();
-        this.actionLogger("Съели правильную еду.");
-        this.score++;
+        const eatenFood = foods[0];
 
-        foods[0].putOnNewPlace(this.locationController.getRandomFreeCell());
-        const randomFreeSkin = this.skinsController.getRandomFreeSkin(foods[0]);
-        foods[0].color = randomFreeSkin.color;
-        foods[0].shape = randomFreeSkin.shape;
+        if (true/*true food*/) {
+          this.actionLogger(`+1 ${eatenFood.text}`);
+          this.score++;
+        } else {
+          this.actionLogger(`-1 ${eatenFood.text}`);
+          this.score--
+        }
+
+        this.snake.growUp();
+
+
+        eatenFood.putOnNewPlace(this.locationController.getRandomFreeCell());
+        const randomFreeSkin = this.skinsController.getRandomFreeSkin(eatenFood);
+        eatenFood.color = randomFreeSkin.color;
+        eatenFood.shape = randomFreeSkin.shape;
       }
       this.snake.update(p);
     }

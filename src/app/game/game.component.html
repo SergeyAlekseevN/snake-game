@@ -2,27 +2,28 @@
   <div id="left-sidebar" *ngIf="p!==null">
     <div class="game-info">
       <button routerLink="registration">Завершить игру</button>
-      <h4>Игрок: Сергей</h4>
+      <h4>Игрок: {{(player|async)?.name}}</h4>
       <h4>Время:
         <app-stopwatch></app-stopwatch>
       </h4>
-      <h4>Очки: {{score|number:"6."}}</h4>
-      <h4>Количество жизней: 3</h4>
-    </div>
-  </div>
-  <div id="canvas"></div>
-  <div id="right-sidebar" *ngIf="p!==null">
-    <div id="artifact-legend">
-      <h4>Артефакты</h4>
-      <ul>
-        <li>ArrayList</li>
-        <li>Garbage collector</li>
-      </ul>
+      <h4>Очки: {{score|number}}</h4>
+      <h4>Количество жизней: {{lives}}</h4>
     </div>
     <div id="actions">
       <h4>Последние действия</h4>
       <ul>
         <li *ngFor="let action of actions">{{action}}</li>
+      </ul>
+    </div>
+  </div>
+  <div id="canvas"></div>
+  <div id="right-sidebar" *ngIf="p!==null">
+    <h4>Тема: {{topic}}</h4>
+    <div id="artifact-legend">
+      <h4>Артефакты</h4>
+      <ul>
+        <li>ArrayList</li>
+        <li>Garbage collector</li>
       </ul>
     </div>
   </div>
