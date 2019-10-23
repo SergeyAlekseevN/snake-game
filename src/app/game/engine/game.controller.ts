@@ -63,6 +63,12 @@ export class GameController extends GameSprite {
   }
 
   draw(p: p5): void {
+
+    if (p.keyIsDown(32)) {
+      p.frameRate(this.settings.fps * 3);
+    } else {
+      p.frameRate(this.settings.fps);
+    }
     this.playground.draw(p);
     this.foods.forEach((food, index) => food.draw(p));
     this.snake.draw(p);
@@ -70,7 +76,7 @@ export class GameController extends GameSprite {
 
   keyPressed(keyCode: number) {
     console.log("keyCode:" + keyCode);
-    if (keyCode === 32) { // space key
+    if (keyCode == 80) { // P key
       this.isPaused = !this.isPaused;
     }
 

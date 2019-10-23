@@ -30,7 +30,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   constructor(public gameService: GameService) {
     console.log("game.component -> constructor");
-    this.settings = new GameSettings(800, 800, 32, 32, 12);
+    this.settings = new GameSettings(800, 800, 32, 32, 6);
   }
 
   @HostListener('window:resize', ['$event'])
