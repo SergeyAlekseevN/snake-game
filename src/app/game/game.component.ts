@@ -22,8 +22,10 @@ export interface Action {
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
   private readonly settings: GameSettings;
   private readonly actionsCapacity = 10;
+  private readonly roundTime: number = 1 * 60;
+
   private isInitedComponent = false;
-  private roundTime: number;
+
   private game: GameController;
   player: Observable<Player>;
 
@@ -43,6 +45,13 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     }
   };
 
+  stopGame() {
+
+    // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
+    this.gameService.stopGameSession(this.score)
+      .then(() => console.log("current game stopped"))
+      .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+  }
 
   constructor(public gameService: GameService) {
     console.log("game.component -> constructor");
@@ -67,9 +76,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   }
 
   ngOnDestroy(): void {
-    this.gameService.stopGameSession(this.score)
-      .then(() => console.log("current game stopped"))
-      .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+    this.stopGame();
     console.log('game.component -> onDestroy');
     if (this.p !== undefined) {
       console.log("Remove p5 sketch");

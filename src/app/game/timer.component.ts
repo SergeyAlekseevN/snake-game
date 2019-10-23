@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angular/core";
 import {timer} from "rxjs";
 import {takeWhile} from "rxjs/operators";
 
@@ -8,8 +8,8 @@ import {takeWhile} from "rxjs/operators";
 })
 export class TimerComponent implements OnDestroy, OnInit {
   isStopped = false;
-  time = 0;
-
+  @Input() seconds: number = 3 * 60;
+  @Output() onTimeout = new EventEmitter<void>();
   ngOnDestroy(): void {
     this.stop();
   }
@@ -27,12 +27,16 @@ export class TimerComponent implements OnDestroy, OnInit {
     timer(0, 1000)
       .pipe(takeWhile(value => this.isStopped === false))
       .subscribe(() => {
-        this.time++;
+        this.seconds--;
+        if (this.seconds <= 0) {
+          this.onTimeout.emit();
+          this.stop();
+        }
       });
   }
 
   getTime(): String {
-    const t = this.getDisplayTimer(this.time);
+    const t = this.getDisplayTimer(this.seconds);
     return t.minutes.digit1 + t.minutes.digit2 + "' " + t.seconds.digit1 + t.seconds.digit2 + "\"";
   }
 

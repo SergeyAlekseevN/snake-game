@@ -4,7 +4,7 @@
       <button routerLink="registration">Завершить игру</button>
       <h4>Игрок: {{(player|async)?.name}}</h4>
       <h4>Время:
-        <app-stopwatch></app-stopwatch>
+        <app-timer [seconds]="roundTime" (onTimeout)="stopGame()"></app-timer>
       </h4>
       <h4>Очки: {{score|number}}</h4>
       <h4>Количество жизней: {{lives}}</h4>
