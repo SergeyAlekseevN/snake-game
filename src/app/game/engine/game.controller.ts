@@ -70,16 +70,20 @@ export class GameController extends GameSprite {
 
   keyPressed(keyCode: number) {
     console.log("keyCode:" + keyCode);
-    if (keyCode === this.p.UP_ARROW) {
-      this.snake.setDirection(Direction.UP);
-    } else if (keyCode === this.p.DOWN_ARROW) {
-      this.snake.setDirection(Direction.DOWN);
-    } else if (keyCode === this.p.RIGHT_ARROW) {
-      this.snake.setDirection(Direction.RIGHT);
-    } else if (keyCode === this.p.LEFT_ARROW) {
-      this.snake.setDirection(Direction.LEFT);
-    } else if (keyCode === 32) { // space key
+    if (keyCode === 32) { // space key
       this.isPaused = !this.isPaused;
+    }
+
+    if (this.isPaused) {
+      if (keyCode === this.p.UP_ARROW) {
+        this.snake.setDirection(Direction.UP);
+      } else if (keyCode === this.p.DOWN_ARROW) {
+        this.snake.setDirection(Direction.DOWN);
+      } else if (keyCode === this.p.RIGHT_ARROW) {
+        this.snake.setDirection(Direction.RIGHT);
+      } else if (keyCode === this.p.LEFT_ARROW) {
+        this.snake.setDirection(Direction.LEFT);
+      }
     }
   }
 }
