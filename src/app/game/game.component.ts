@@ -25,7 +25,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   private isInitedComponent = false;
   private roundTime: number;
   private game: GameController;
-  private player: Observable<Player>;
+  player: Observable<Player>;
 
   p: P5;
   actions: Action[] = [];
