@@ -168,29 +168,35 @@ export class Snake extends GameSprite {
           tx = 2;
           ty = 1;
         } else if (
-          prevSegment.x + 1 == currentX && nextSegment.y - 1 == currentY ||
-          nextSegment.x + 1 == currentX && prevSegment.y - 1 == currentY) {
-          // Angle Left-Down
+          /*Angle Left-Down*/
+          (nextSegment.x + 1 == currentX || nextSegment.x - cols + 1 == currentX) && (prevSegment.y - 1 == currentY || prevSegment.y + rows - 1 == currentY) ||
+          (nextSegment.y - 1 == currentY || nextSegment.y + rows - 1 == currentY) && (prevSegment.x + 1 == currentX || prevSegment.x - cols + 1 == currentX)) {
           tx = 2;
           ty = 0;
         } else if (
-          prevSegment.y + 1 == currentY && nextSegment.x + 1 == currentX ||
-          nextSegment.y + 1 == currentY && prevSegment.x + 1 == currentX) {
-          // Angle Top-Left
+          /*Angle Left-Top*/
+          (nextSegment.x + 1 == currentX || nextSegment.x - cols + 1 == currentX) && (prevSegment.y + 1 == currentY || prevSegment.y - rows + 1 == currentY) ||
+          (nextSegment.y + 1 == currentY || nextSegment.y - rows + 1 == currentY) && (prevSegment.x + 1 == currentX || prevSegment.x - cols + 1 == currentX)
+        ) {
           tx = 2;
           ty = 2;
         } else if (
-          prevSegment.x - 1 == currentX && nextSegment.y + 1 == currentY ||
-          nextSegment.x - 1 == currentX && prevSegment.y + 1 == currentY) {
-          // Angle Right-Up
+          /*Angle Right-Up*/
+          (nextSegment.x - 1 == currentX || nextSegment.x + cols - 1 == currentX) && (prevSegment.y + 1 == currentY || prevSegment.y - rows + 1 == currentY) ||
+          (nextSegment.y + 1 == currentY || nextSegment.y - rows + 1 == currentY) && (prevSegment.x - 1 == currentX || prevSegment.x + cols - 1 == currentX)
+        ) {
           tx = 0;
           ty = 1;
         } else if (
-          prevSegment.y - 1 == currentY && nextSegment.x - 1 == currentX ||
-          nextSegment.y - 1 == currentY && prevSegment.x - 1 == currentX) {
-          // Angle Down-Right
+          /*Angle Right-Down*/
+          (nextSegment.x - 1 == currentX || nextSegment.x + cols - 1 == currentX) && (prevSegment.y - 1 == currentY || prevSegment.y + rows - 1 == currentY) ||
+          (nextSegment.y - 1 == currentY || nextSegment.y + rows - 1 == currentY) && (prevSegment.x - 1 == currentX || prevSegment.x + cols - 1 == currentX)
+        ) {
           tx = 0;
           ty = 0;
+        } else {
+          tx = 0;
+          ty = 3;
         }
       }
 
