@@ -3,7 +3,7 @@ import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} 
 import {Player} from "../db/player.model";
 import {Game} from "../db/game.model";
 import {map, switchMap} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {EMPTY, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +62,15 @@ export class GameService {
     localStorage.removeItem('gameId');
   }
 
+  getCurrentPlayer(): Observable<Player> {
+    let result: Observable<Player> = EMPTY;
+    if (this.getGameId()) {
+      const playerRef: AngularFirestoreDocument<Player> = this.db.doc(`players/${localStorage.getItem('playerId')}`);
+      result = playerRef.valueChanges();
+    }
+    return result;
+  }
+
   /**
    * 1. поискать по номеру телефона запись
    * 2. если есть - вернуть ID
@@ -117,6 +126,7 @@ export class GameService {
         console.warn(`Can't get playerId. reason: ${reason}`);
         throw new Error(`Can't create playerId. ${reason}`);
       });
+    localStorage.setItem('playerId', playerId);
 
     let deviceId = this.deviceId();
     let gameId = this.createGameId();
@@ -134,6 +144,7 @@ export class GameService {
   async stopGameSession(score: number) {
     const gameId = this.getGameId();
     this.deleteGameId();
+    localStorage.removeItem('playerId');
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
     return gameRef.set({score: score, stop: new Date(), state: 'offline'}, {merge: true});
   }
