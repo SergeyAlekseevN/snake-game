@@ -1,0 +1,15 @@
+guava
+mahout
+hadoop
+lucene
+netty
+Jenkins
+Mockito
+spark
+storm
+ZooKeeper
+jackson
+trove
+kryo
+Hibernate
+ASM

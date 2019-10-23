@@ -68,7 +68,7 @@ export class Snake extends GameSprite {
   }
 
   draw(p: p5): void {
-    let pseg;
+    let prevSegment;
     let ty;
     let tx;
     /**
@@ -121,22 +121,22 @@ export class Snake extends GameSprite {
         //tail
         let tail = this.body[i];
         // Tail; Determine the correct image
-        pseg = this.body[i - 1]; // Prev segment
+        prevSegment = this.body[i - 1]; // Prev segment
         segx = tail.x;
         segy = tail.y;
-        if (pseg.y < segy) {
+        if (prevSegment.y < segy) {
           // Up
           tx = 3;
           ty = 2;
-        } else if (pseg.x > segx) {
+        } else if (prevSegment.x > segx) {
           // Right
           tx = 4;
           ty = 2;
-        } else if (pseg.y > segy) {
+        } else if (prevSegment.y > segy) {
           // Down
           tx = 4;
           ty = 3;
-        } else if (pseg.x < segx) {
+        } else if (prevSegment.x < segx) {
           // Left
           tx = 3;
           ty = 3;
@@ -150,29 +150,31 @@ export class Snake extends GameSprite {
         ty = 0;
 
         // Body; Determine the correct image
-        pseg = this.body[i - 1];
-        let nseg = this.body[i + 1]; // Next segment
-        if (pseg.x < segx && nseg.x > segx || nseg.x < segx && pseg.x > segx) {
+        prevSegment = this.body[i - 1];
+        let nextSegment = this.body[i + 1]; // Next segment
+        if (
+          prevSegment.x < segx && nextSegment.x > segx ||
+          nextSegment.x < segx && prevSegment.x > segx) {
           // Horizontal Left-Right
           tx = 1;
           ty = 0;
-        } else if (pseg.x < segx && nseg.y > segy || nseg.x < segx && pseg.y > segy) {
+        } else if (prevSegment.x < segx && nextSegment.y > segy || nextSegment.x < segx && prevSegment.y > segy) {
           // Angle Left-Down
           tx = 2;
           ty = 0;
-        } else if (pseg.y < segy && nseg.y > segy || nseg.y < segy && pseg.y > segy) {
+        } else if (prevSegment.y < segy && nextSegment.y > segy || nextSegment.y < segy && prevSegment.y > segy) {
           // Vertical Up-Down
           tx = 2;
           ty = 1;
-        } else if (pseg.y < segy && nseg.x < segx || nseg.y < segy && pseg.x < segx) {
+        } else if (prevSegment.y < segy && nextSegment.x < segx || nextSegment.y < segy && prevSegment.x < segx) {
           // Angle Top-Left
           tx = 2;
           ty = 2;
-        } else if (pseg.x > segx && nseg.y < segy || nseg.x > segx && pseg.y < segy) {
+        } else if (prevSegment.x > segx && nextSegment.y < segy || nextSegment.x > segx && prevSegment.y < segy) {
           // Angle Right-Up
           tx = 0;
           ty = 1;
-        } else if (pseg.y > segy && nseg.x > segx || nseg.y > segy && pseg.x > segx) {
+        } else if (prevSegment.y > segy && nextSegment.x > segx || nextSegment.y > segy && prevSegment.x > segx) {
           // Angle Down-Right
           tx = 0;
           ty = 0;
