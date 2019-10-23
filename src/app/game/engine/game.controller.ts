@@ -20,12 +20,12 @@ export class GameController extends GameSprite {
   topic: string = "no topic";
 
   private isPaused: boolean = true;
-  private readonly actionLogger: (message: string) => void;
+  private readonly actionLogger: (message: string, color: string, points: string) => void;
 
   constructor(
     public p: p5,
     public settings: GameSettings,
-    actionHandler: (message: string) => void
+    actionHandler: (message: string, color: string, points: string) => void
   ) {
     super(p);
     console.log("constructor of game controller");
@@ -59,11 +59,11 @@ export class GameController extends GameSprite {
       if (foods.length > 0) {
         const eatenFood = foods[0];
 
-        if (true/*true food*/) {
-          this.actionLogger(`+1 ${eatenFood.text}`);
+        if (p.random(4) > 2/*true food*/) {// TODO: 24.10.2019 Sergey Alekseev: проверка что правильная еда
+          this.actionLogger(`${eatenFood.text}`, 'green', '+1');
           this.score++;
         } else {
-          this.actionLogger(`-1 ${eatenFood.text}`);
+          this.actionLogger(`${eatenFood.text}`, 'red', '-1');
           this.score--
         }
 

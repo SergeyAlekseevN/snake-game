@@ -7,6 +7,13 @@ import {GameService} from "./game.service";
 import {Player} from "../db/player.model";
 import {Observable} from "rxjs";
 
+export interface Action {
+  message: string;
+  points: string;
+  color: string;
+  index: number;
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -14,22 +21,23 @@ import {Observable} from "rxjs";
 })
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
   private readonly settings: GameSettings;
-  private readonly actionsCapacity = 7;
+  private readonly actionsCapacity = 10;
   private isInitedComponent = false;
   private roundTime: number;
   private game: GameController;
   private player: Observable<Player>;
 
   p: P5;
-  actions: string[] = [];
+  actions: Action[] = [];
   score: number = 0;
 
 
   lives: number = 0;
   topic: string;
-
-  actionHandler = (message: string) => {
-    this.actions.push(message);
+  actionCounter: number = 0;
+  actionHandler = (message: string, color: string, points: string) => {
+    this.actionCounter++;
+    this.actions.push({index: this.actionCounter, message, color, points});
     if (this.actions.length > this.actionsCapacity) {
       this.actions.shift();
     }
@@ -47,8 +55,9 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     console.log(`game.component -> onResize ${event.target.innerWidth} x ${event.target.innerHeight}`);
     this.resize(event.target.innerWidth, event.target.innerHeight);
   }
-  @HostListener('window:beforeunload',['$event'])
-  beforeUnload(event){
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnload(event) {
     this.ngOnDestroy();
     event.stopPropagation();
   }

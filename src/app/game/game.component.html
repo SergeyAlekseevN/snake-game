@@ -11,9 +11,9 @@
     </div>
     <div id="actions">
       <h4>Последние действия</h4>
-      <ul>
-        <li *ngFor="let action of actions">{{action}}</li>
-      </ul>
+      <div [style.margin]="'10px'" *ngFor="let action of actions"> {{action.index}}. {{action.message}} <b
+        *ngIf="action.points" [style.color]="action.color"> {{action.points}}</b>
+      </div>
     </div>
   </div>
   <div id="canvas"></div>
