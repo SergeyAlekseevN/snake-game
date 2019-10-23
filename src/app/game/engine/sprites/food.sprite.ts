@@ -11,6 +11,7 @@ export class Food extends GameSprite {
   public coord: Vector;
   public shape: Shape = Shape.square;
   public color: Color = Color.RED;
+  public text: string = ''
 
   constructor(p: p5, public settings: GameSettings, public locationController: LocationController) {
     super(p);
@@ -72,6 +73,7 @@ export class Food extends GameSprite {
       console.log(`shape= ${this.shape} color=${this.color}`)
     }
   }
+
   update(p: p5): void {
     // only self-update.
   }
