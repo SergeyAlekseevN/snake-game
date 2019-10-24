@@ -18,7 +18,7 @@ import {RegistrationComponent} from './game/registration/registration.component'
 import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
 import {TimerComponent} from "./game/timer.component";
-import { RulesComponent } from './game/rules/rules.component';
+import {RulesComponent} from './game/rules/rules.component';
 
 @NgModule({
   declarations: [
