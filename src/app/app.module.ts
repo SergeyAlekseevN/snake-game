@@ -18,6 +18,7 @@ import {RegistrationComponent} from './game/registration/registration.component'
 import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
 import {TimerComponent} from "./game/timer.component";
+import { RulesComponent } from './game/rules/rules.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {TimerComponent} from "./game/timer.component";
     SettingsComponent,
     LoginComponent,
     RegistrationComponent,
-    ProfileComponent
+    ProfileComponent,
+    RulesComponent
   ],
   imports: [
     MaterialModule,
@@ -41,6 +43,9 @@ import {TimerComponent} from "./game/timer.component";
     AngularFireStorageModule,
     ReactiveFormsModule,
     FormsModule,
+  ],
+  entryComponents: [
+    RulesComponent
   ],
   providers: [
     LeaderboardService
