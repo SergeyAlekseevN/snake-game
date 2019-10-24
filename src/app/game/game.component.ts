@@ -46,7 +46,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   };
 
   stopGame() {
-
     // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
     this.gameService.stopGameSession(this.score)
       .then(() => console.log("current game stopped"))
