@@ -14,12 +14,12 @@ export class Snake extends GameSprite {
   private ySpeed = 0;
   private direction: Direction = Direction.RIGHT;
   private initialLength;
+  private lastMoveDirection: Direction = Direction.RIGHT;
 
   private body: Vector[] = [];
   private grow = false;
 
   private isMoving: boolean = false;
-  private isOpenMouth: boolean = false;
   public onSelfEat: () => void;
 
   constructor(public p: p5, public settings: GameSettings, public locationController: LocationController) {
@@ -57,17 +57,10 @@ export class Snake extends GameSprite {
   }
 
   update(p: p5) {
-    this.applyMode();
     if (this.isMoving) {
-      this.checkNextStep();
-      this.checkCurrentStep();
       this.move();
       this.checkSelfCollision();
     }
-  }
-
-  private applyMode() {
-    // this.isMoving = false;
   }
 
   draw(p: p5): void {
@@ -208,20 +201,6 @@ export class Snake extends GameSprite {
     }
   }
 
-  checkCurrentStep() {
-    /**
-     * Проверить текущее положение головы
-     * Если еда - издать звук и увеличить очки.
-     */
-  }
-
-  checkNextStep() {
-    /**
-     * Проверить следующий ход в текущем направлении.
-     * Если еда - открыть рот.
-     */
-  }
-
   getCurrentPosition() {
     return this.p.createVector(this.body[0].x, this.body[0].y);
   }
@@ -235,8 +214,8 @@ export class Snake extends GameSprite {
      */
 
     const newHead = this.getNextPosition(this.body[0]);
-    this.body.unshift(newHead);
     this.locationController.set(newHead.x, newHead.y);
+    this.body.unshift(newHead);
     if (this.grow) {
       this.grow = false;
     } else {
@@ -250,8 +229,11 @@ export class Snake extends GameSprite {
     const cols = this.settings.cols;
     const rows = this.settings.rows;
 
-    let x = position.x + this.xSpeed;
-    let y = position.y + this.ySpeed;
+    const xSpeed = this.xSpeed;
+    const ySpeed = this.ySpeed;
+
+    let x = position.x + xSpeed;
+    let y = position.y + ySpeed;
 
     // если стены замкнуты
     if (x >= cols) {
@@ -267,6 +249,15 @@ export class Snake extends GameSprite {
       y = rows - 1;
     }
 
+    if (xSpeed === 0 && ySpeed === 1) {
+      this.lastMoveDirection = Direction.DOWN;
+    } else if (xSpeed === -1 && ySpeed === 0) {
+      this.lastMoveDirection = Direction.LEFT;
+    } else if (xSpeed === 0 && ySpeed === -1) {
+      this.lastMoveDirection = Direction.UP;
+    } else if (xSpeed === 1 && ySpeed === 0) {
+      this.lastMoveDirection = Direction.RIGHT;
+    }
     return this.p.createVector(x, y);
   }
 
@@ -278,35 +269,35 @@ export class Snake extends GameSprite {
   public setDirection(newDirection: Direction) {
     switch (newDirection) {
       case Direction.DOWN:
-        if (this.direction !== Direction.UP) {
+        if (this.direction !== Direction.UP && this.lastMoveDirection !== Direction.UP) {
           this.setSpeed(0, 1);
           this.direction = Direction.DOWN;
         }
         break;
       case Direction.LEFT:
-        if (this.direction !== Direction.RIGHT) {
+        if (this.direction !== Direction.RIGHT && this.lastMoveDirection !== Direction.RIGHT) {
           this.setSpeed(-1, 0);
           this.direction = Direction.LEFT;
         }
         break;
       case Direction.UP:
-        if (this.direction !== Direction.DOWN) {
+        if (this.direction !== Direction.DOWN && this.lastMoveDirection !== Direction.DOWN) {
           this.setSpeed(0, -1);
           this.direction = Direction.UP;
         }
         break;
       case Direction.RIGHT:
-        if (this.direction != Direction.LEFT) {
+        if (this.direction != Direction.LEFT && this.lastMoveDirection !== Direction.LEFT) {
           this.setSpeed(1, 0);
           this.direction = Direction.RIGHT;
         }
+        break;
     }
   }
 
   private setSpeed(x: number, y: number) {
     this.xSpeed = x;
     this.ySpeed = y;
-
     this.isMoving = true;
   }
 
