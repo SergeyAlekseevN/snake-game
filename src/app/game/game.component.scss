@@ -26,9 +26,14 @@ h4 {
 
 #left-sidebar {
   margin: 15px;
-
+  overflow: hidden;
+  white-space: pre;
+  width: 20%;
 }
 
 #right-sidebar {
   margin: 15px;
+  overflow: hidden;
+  white-space: pre;
+  width: 20%;
 }
