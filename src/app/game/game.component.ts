@@ -76,6 +76,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   openResultsDialog(): void {
     const dialogRef = this.dialog.open(ResultsComponent, {
+      disableClose: true,
       height: `${window.innerHeight / 4}`,
       width: `${window.innerWidth / 4}`,
       data: {player: this.player, score: this.score}
@@ -92,6 +93,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
       this.gameService.stopGameSession(this.score)
         .then(() => console.log("current game stopped"))
         .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+      this.timerComponent.stop();
       this.openResultsDialog();
     }
   }
