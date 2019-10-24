@@ -243,7 +243,7 @@ export class Snake extends GameSprite {
       const deletedTile = this.body.pop();
       this.locationController.unset(deletedTile.x, deletedTile.y);
     }
-    console.log(`snake length ${this.body.length}, isGrow = ${this.grow}`);
+    // console.log(`snake length ${this.body.length}, isGrow = ${this.grow}`);
   }
 
   getNextPosition(position: Vector): Vector {
