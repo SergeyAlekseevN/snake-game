@@ -3,7 +3,7 @@
 body {
   margin: 0;
   font-family: 'DINRoundPro', Roboto, "Helvetica Neue", sans-serif;
-  font-size: 30px;
+  font-size: 28px;
 }
 
 @font-face {
@@ -21,20 +21,12 @@ body {
   src: url('/assets/fonts/DINRoundPro.woff');
 }
 
-
 button {
   font-family: 'DINRoundPro', Roboto, "Helvetica Neue", sans-serif;
-  font-size: 30px;
+  font-size: 28px;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'DINRoundPro-Bold', Helvetica, Arial, sans-serif;
 }
 
-h1 {
-  padding-bottom: 10px;
-}
-
-h2 {
-  padding-bottom: 6px;
-}
