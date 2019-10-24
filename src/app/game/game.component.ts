@@ -29,7 +29,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   private readonly actionsCapacity = 10;
 
-  readonly roundTime: number = 1 * 60;
+  readonly roundTime: number = 140;
   gameStarted = false;
   private isInitedComponent = false;
 
