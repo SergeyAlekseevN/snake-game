@@ -23,7 +23,7 @@ export class RegistrationComponent implements OnInit {
       name: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(10),
+        Validators.maxLength(25),
         Validators.pattern('[a-zA-Zа-яА-Я ]*')
       ]),
       phone: new FormControl('', [
