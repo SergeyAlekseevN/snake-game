@@ -8,7 +8,7 @@
   <div>
     <button mat-stroked-button routerLink="/registration">Игра</button>
     <button mat-stroked-button routerLink="/leaderboard">Зал славы</button>
-    <button mat-stroked-button routerLink="/settings">Настройки игры</button>
+    <button *ngIf="user?.roles?.includes('admin')" mat-stroked-button routerLink="/settings">Настройки игры</button>
   </div>
   <hr>
 
