@@ -1,14 +1,16 @@
 <div class="container">
-  <div>
-    <div class="example-container">
-      <br>
-      <button style="height: 2em;" routerLink="/registration">Новая игра</button>
-    </div>
-    <h1>Топ игроков</h1>
-    <mat-list>
-      <mat-list-item *ngFor="let player of players|async; let i=index;">
-        <h2>{{i + 1}}. {{player.name}}: {{player.score|number}}</h2>
-      </mat-list-item>
-    </mat-list>
+  <h1>Топ игроков</h1>
+</div>
+
+<mat-list class="multicolumn">
+  <mat-list-item style="width: max-content;" *ngFor="let player of players|async; let i=index;">
+    <h2>{{i + 1}}. {{player.name}}: {{player.score|number}}</h2>
+  </mat-list-item>
+</mat-list>
+
+<div class="container">
+  <div class="example-container">
+    <br>
+    <button style="height: 2em;" routerLink="/registration">Новая игра</button>
   </div>
 </div>

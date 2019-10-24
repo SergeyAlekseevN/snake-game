@@ -11,3 +11,12 @@
   display: flex;
   justify-content: center;
 }
+
+.multicolumn {
+  margin-left: 20px;
+  width: max-content;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
