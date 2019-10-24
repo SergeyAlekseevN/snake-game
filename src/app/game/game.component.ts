@@ -161,8 +161,8 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
       return;
     }
 
-    this.settings.height = height - 20; //15px margin top
-    this.settings.width = height - 20;
+    this.settings.height = 900; // TODO: 24.10.2019 Sergey Alekseev: захардкодил под размер ноутов на конфе
+    this.settings.width = 900;
 
     this.settings.scaleX = Math.floor(this.settings.width / this.settings.cols);
     this.settings.scaleY = Math.floor(this.settings.height / this.settings.rows);
