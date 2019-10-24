@@ -36,7 +36,8 @@ export class GameController extends GameSprite {
     this.snake = new Snake(this.p, this.settings, this.locationController);
     this.snake.initSnake(4, p.createVector(4, 0));
     this.snake.onSelfEat = () => {
-      this.score = -3;
+      this.score -= 3;
+      this.lives -= 1;
       this.actionLogger("откусили хвост", "red", '-3');
     };
     this.loadFood(7);
@@ -71,7 +72,6 @@ export class GameController extends GameSprite {
         }
 
         this.snake.growUp();
-
 
         eatenFood.putOnNewPlace(this.locationController.getRandomFreeCell());
         const randomFreeSkin = this.skinsController.getRandomFreeSkin(eatenFood);
