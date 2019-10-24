@@ -24,7 +24,7 @@ export class RegistrationComponent implements OnInit {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(25),
-        Validators.pattern('[a-zA-Zа-яА-Я ]*')
+        Validators.pattern('[a-zA-Zа-яА-Я]*([ ][a-zA-Zа-яА-Я]*)?')
       ]),
       phone: new FormControl('', [
         Validators.pattern('\\+?\\d{6,15}$')
