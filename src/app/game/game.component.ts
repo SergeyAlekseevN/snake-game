@@ -76,15 +76,12 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   openResultsDialog(): void {
     const dialogRef = this.dialog.open(ResultsComponent, {
-      // disableClose: true,
       height: `${window.innerHeight / 4}`,
       width: `${window.innerWidth / 4}`,
-      data: {player: this.player}
+      data: {player: this.player, score: this.score}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('STOP Game!!!');
-      return this.router.navigate(['/leaderboard']);
     });
   }
 

@@ -1,1 +1,10 @@
-<p>results works!</p>
+<mat-dialog-content>
+  <h3>{{(data.player|async)?.name}}, игра окончена!</h3>
+  <h3>Ты заработал {{data.score}} очков!</h3>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button routerLink="/leaderboard" style="min-height: 2em;" [mat-dialog-close]="true">Показать Топ игроков</button>
+  <!--  <button style="min-height: 2em;" [mat-dialog-close]="true">Попробоавть ещё раз</button>-->
+  <button routerLink="/registration" style="min-height: 2em;" [mat-dialog-close]="true" cdkFocusInitial>Закончить игру
+  </button>
+</mat-dialog-actions>

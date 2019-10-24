@@ -11,7 +11,7 @@ import {Player} from "../../db/player.model";
 export class ResultsComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ResultsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { player: Observable<Player> }
+    @Inject(MAT_DIALOG_DATA) public data: { player: Observable<Player>, score: number }
   ) {
   }
 
