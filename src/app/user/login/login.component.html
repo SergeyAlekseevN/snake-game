@@ -12,17 +12,19 @@
   </div>
   <hr>
 
-  <h3>Games Online</h3>
-  <ul>
-    <li *ngFor="let game of games|async">
-      <ul>
-        <li>device: {{game.deviceId}}</li>
-        <li>player: {{game.playerId}}</li>
-        <li>game: {{game.gameId}}</li>
-        <li>started: {{game.start.toMillis()|date:'HH:mm:ss:SSS dd.MM.yyyy'}}</li>
-      </ul>
-    </li>
-  </ul>
+  <div *ngIf="user?.roles?.includes('admin')">
+    <h3>Games Online</h3>
+    <ul>
+      <li *ngFor="let game of games|async">
+        <ul>
+          <li>device: {{game.deviceId}}</li>
+          <li>player: {{game.playerId}}</li>
+          <li>game: {{game.gameId}}</li>
+          <li>started: {{game.start.toMillis()|date:'HH:mm:ss:SSS dd.MM.yyyy'}}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </div>
 <ng-template #login>
   <button mat-raised-button (click)="auth.googleSignIn()">Login with Google</button>
