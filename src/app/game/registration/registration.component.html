@@ -13,10 +13,10 @@
       <mat-form-field appearance="outline">
         <mat-label>Мобильный телефон</mat-label>
         <input maxlength="25" formControlName="phone" matInput placeholder="">
-        <mat-error>Телефон в международном формате.</mat-error>
+        <mat-error>Введи свой мобильный телефон.</mat-error>
         <mat-hint>При выигрыше мы тебе пришлём sms-уведомление для получения приза!</mat-hint>
       </mat-form-field>
-      <br><br>
+      <br>
       <button style="height: 3em;" type="submit" [disabled]="!playerForm.valid">Играть</button>
     </form>
     <div class="example-container">
