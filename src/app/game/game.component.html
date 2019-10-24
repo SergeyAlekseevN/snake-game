@@ -11,20 +11,18 @@
     </div>
     <div id="actions">
       <h4>Последние действия</h4>
-      <div [style.margin]="'10px'" *ngFor="let action of actions"> {{action.index}}. {{action.message}} <b
-        *ngIf="action.points" [style.color]="action.color"> {{action.points}}</b>
-      </div>
+      <div class="lastAction" *ngFor="let action of actions"> {{action.index}}. <b
+        *ngIf="action.points" [style.color]="action.color">{{action.points}}</b> {{action.message}}</div>
     </div>
   </div>
   <div id="canvas"></div>
   <div id="right-sidebar" *ngIf="p!==null">
-    <h4>Тема: {{topic}}</h4>
+    <h2>Тема:<br><span style="color: green;">{{topic}}</span></h2>
     <div id="artifact-legend">
       <h4>Артефакты на поле:</h4>
-      <ul>
-        <li>ArrayList</li>
-        <li>Garbage collector</li>
-      </ul>
+      <div style="margin-left: 10px;">
+        <p *ngFor="let food of foods">{{food.icon}} {{food.text}}</p>
+      </div>
     </div>
   </div>
 </div>

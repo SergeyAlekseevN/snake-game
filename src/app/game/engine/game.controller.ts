@@ -13,7 +13,7 @@ export class GameController extends GameSprite {
   private readonly locationController: LocationController;
   private readonly skinsController: SkinsController;
   private readonly snake: Snake;
-  private readonly foods: Food[] = [];
+  public readonly foods: Food[] = [];
   private readonly playground: Playground;
 
   score: number = 0;
@@ -22,6 +22,7 @@ export class GameController extends GameSprite {
 
   topicsController: TopicsController;
   private isNotPaused: boolean = true;
+  private isGameStarted: boolean = false;
   private readonly actionLogger: (message: string, color: string, points: string) => void;
   private readonly onGameOver: (score: number) => void;
 
@@ -47,15 +48,15 @@ export class GameController extends GameSprite {
     };
     this.onGameOver = onGameOver;
     this.loadFood(7);
-    this.topicsController.initTopics();
-
   }
 
   public startGame() {
+    this.isGameStarted = true;
     this.topicsController.generateTopics();
   }
 
   public stopGame() {
+    this.isGameStarted = false;
     this.topicsController.stopGenerateTopics();
   }
 
@@ -63,43 +64,47 @@ export class GameController extends GameSprite {
     for (let i = 0; i < count; i++) {
       let food = new Food(this.p, this.settings, this.locationController);
       food.putOnNewPlace(this.locationController.getRandomFreeCell());
-      const randomFreeSkin = this.skinsController.getRandomFreeSkin(food);
-      food.color = randomFreeSkin.color;
-      food.shape = randomFreeSkin.shape;
-      food.text = "text";
+      food.icon = this.skinsController.getRandomFreeEmoji(food);
+      food.text = this.topicsController.getRandomWordFromCurrentTopic();
       this.foods.push(food);
     }
   }
 
   update(p: p5): void {
+    this.topic = this.topicsController.getCurrentTopic().name;
     if (this.isNotPaused) {
       if (this.lives <= 0) {
         this.isNotPaused = false;
         this.onGameOver(this.score);
+
       }
-      const foods = this.foods.filter((food, index) => this.snake.isFoodEaten(food.coord));
+      if (this.isGameStarted) {
+        const foods = this.foods.filter((food, index) => this.snake.isFoodEaten(food.coord));
+        if (foods.length > 0) {
+          const eatenFood = foods[0];
 
-      if (foods.length > 0) {
-        const eatenFood = foods[0];
+          if (this.isGoodFood(eatenFood)) {// TODO: 24.10.2019 Sergey Alekseev: проверка что правильная еда
+            this.actionLogger(`${eatenFood.text}`, 'green', '+1');
+            this.score++;
+          } else {
+            this.actionLogger(`${eatenFood.text}`, 'red', '-1');
+            this.score--
+          }
 
-        if (p.random(4) > 2/*true food*/) {// TODO: 24.10.2019 Sergey Alekseev: проверка что правильная еда
-          this.actionLogger(`${eatenFood.text}`, 'green', '+1');
-          this.score++;
-        } else {
-          this.actionLogger(`${eatenFood.text}`, 'red', '-1');
-          this.score--
+          this.snake.growUp();
+
+          eatenFood.putOnNewPlace(this.locationController.getRandomFreeCell());
+          eatenFood.icon = this.skinsController.getRandomFreeEmoji(eatenFood);
+          eatenFood.text = this.topicsController.getRandomWordFromCurrentTopic();
         }
-
-        this.snake.growUp();
-
-        eatenFood.putOnNewPlace(this.locationController.getRandomFreeCell());
-        const randomFreeSkin = this.skinsController.getRandomFreeSkin(eatenFood);
-        eatenFood.color = randomFreeSkin.color;
-        eatenFood.shape = randomFreeSkin.shape;
+        this.snake.update(p);
       }
-      this.snake.update(p);
-      this.topic = this.topicsController.getCurrentTopic().name;
     }
+  }
+
+  isGoodFood(food: Food): boolean {
+    return this.topicsController.getCurrentTopic().words
+      .find(value => value.trim().startsWith(food.text.trim())) !== null;
   }
 
   draw(p: p5): void {
@@ -120,13 +125,13 @@ export class GameController extends GameSprite {
     }
 
     if (this.isNotPaused) {
-      if (keyCode === this.p.UP_ARROW) {
+      if (keyCode === this.p.UP_ARROW || keyCode === 87) {
         this.snake.setDirection(Direction.UP);
-      } else if (keyCode === this.p.DOWN_ARROW) {
+      } else if (keyCode === this.p.DOWN_ARROW || keyCode === 83) {
         this.snake.setDirection(Direction.DOWN);
-      } else if (keyCode === this.p.RIGHT_ARROW) {
+      } else if (keyCode === this.p.RIGHT_ARROW || keyCode === 68) {
         this.snake.setDirection(Direction.RIGHT);
-      } else if (keyCode === this.p.LEFT_ARROW) {
+      } else if (keyCode === this.p.LEFT_ARROW || keyCode === 65) {
         this.snake.setDirection(Direction.LEFT);
       }
     }

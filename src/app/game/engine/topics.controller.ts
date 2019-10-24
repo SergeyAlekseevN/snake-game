@@ -281,6 +281,10 @@ export class TopicsController {
   current: Topic;
   currentSubscription: Subscription;
 
+  constructor() {
+    this.initTopics();
+  }
+
   public initTopics(): void {
     this.free = new Array<number>(this.topics.length);
     for (let i = 0; i < this.topics.length; i++) {
@@ -311,6 +315,12 @@ export class TopicsController {
       console.log('stop generate topics');
       this.currentSubscription.unsubscribe();
     }
+  }
+
+  public getRandomWordFromCurrentTopic(): string {
+    const length = this.current.words.length;
+    const index = Math.floor(Math.random() * length);
+    return this.current.words[index];
   }
 
   public getCurrentTopic() {

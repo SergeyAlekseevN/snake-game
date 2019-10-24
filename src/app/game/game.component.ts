@@ -11,6 +11,7 @@ import {RulesComponent} from "./rules/rules.component";
 import {TimerComponent} from "./timer.component";
 import {ResultsComponent} from "./results/results.component";
 import {Router} from "@angular/router";
+import {Food} from "./engine/sprites/food.sprite";
 
 export interface Action {
   message: string;
@@ -46,6 +47,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   lives: number = 0;
   topic: string;
   actionCounter: number = 0;
+  foods: Food[];
 
   constructor(
     public dialog: MatDialog,
@@ -210,6 +212,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
             this.score = this.game.score;
             this.topic = this.game.topic;
             this.lives = this.game.lives;
+            this.foods = this.game.foods;
             this.game.draw(p);
           }
 
