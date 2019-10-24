@@ -101,8 +101,8 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   openRulesDialog(): void {
     const dialogRef = this.dialog.open(RulesComponent, {
       disableClose: true,
-      height: `${window.innerHeight / 4}`,
-      width: `${window.innerWidth / 4}`,
+      height: `${window.innerHeight / 2}`,
+      width: `${window.innerWidth / 2}`,
       data: {player: this.player}
     });
 
