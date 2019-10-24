@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {LeaderboardService, Player} from "./leaderboard.service";
+import {LeaderboardService, TopPlayer} from "./leaderboard.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-leaderboard',
@@ -7,10 +8,11 @@ import {LeaderboardService, Player} from "./leaderboard.service";
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
-  players: Player[] = [];
+  players: Observable<TopPlayer[]>;
 
   constructor(public leaderboardService: LeaderboardService) {
-    leaderboardService.getLeaders().subscribe(results => this.players = results);
+    this.players = leaderboardService.getLeaders();
+
   }
 
   ngOnInit() {
