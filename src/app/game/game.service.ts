@@ -4,16 +4,22 @@ import {Player} from "../db/player.model";
 import {Game} from "../db/game.model";
 import {map, switchMap} from "rxjs/operators";
 import {EMPTY, Observable} from "rxjs";
+import {LeaderboardService} from "./leaderboard/leaderboard.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+
+
   /**
    * Храним в памяти токен активной сессии игры
    * При завершении игры удаляем токен
    */
-  constructor(private db: AngularFirestore) {
+  constructor(
+    private db: AngularFirestore,
+    public leaderboardService: LeaderboardService
+  ) {
   }
 
   async closeOpenedGameSessionsByDeviceId(deviceId: string) {
@@ -35,7 +41,7 @@ export class GameService {
   /**
    * Идентификатор устройства.
    */
-  deviceId(): string {
+  getDeviceId(): string {
     let deviceId = localStorage.getItem('deviceId');
     if (deviceId === null || deviceId.length <= 0) {
       deviceId = this.db.createId();
@@ -65,6 +71,7 @@ export class GameService {
   getCurrentPlayer(): Observable<Player> {
     let result: Observable<Player> = EMPTY;
     if (this.getGameId()) {
+      console.log('get player');
       const playerRef: AngularFirestoreDocument<Player> = this.db.doc(`players/${localStorage.getItem('playerId')}`);
       result = playerRef.valueChanges();
     }
@@ -76,7 +83,7 @@ export class GameService {
    * 2. если есть - вернуть ID
    * 3. если нет то создать, сохранить и вернуть ID
    */
-  async playerId(name: string, phone: string): Promise<string> {
+  async getPlayerId(name: string, phone: string): Promise<string> {
     console.log("try find player by phone=" + phone);
     let player: Player = null;
     if (phone !== undefined && phone !== null && phone.length > 0) {
@@ -97,7 +104,7 @@ export class GameService {
     } else {
       console.log(`Player with phone ${phone} does not exist. Create new Player.`)
       const playerId = this.db.createId();
-      const newPlayer: Player = {playerId: playerId, name: name, phone: phone, bestScore: 0, gameCount: 0};
+      const newPlayer: Player = {playerId: playerId, name: name, phone: phone, bestScore: null, gameCount: 0};
 
       console.log(`create player with playerId=${playerId}`);
       await this.db.collection('players').doc(playerId).set(newPlayer)
@@ -115,13 +122,13 @@ export class GameService {
    */
   async startGameSession(phone: string, name: string, start: Date) {
     console.log(`before start new game session close opened earlier game sessions.`);
-    await this.closeOpenedGameSessionsByDeviceId(this.deviceId())
+    await this.closeOpenedGameSessionsByDeviceId(this.getDeviceId())
       .then(() => console.log(`Successfully closed opened games.`))
       .catch(reason => console.warn(`Error with closing opened games. ${reason}`));
 
     console.log('gameSession -> start session');
     let playerId = null;
-    await this.playerId(name, phone)
+    await this.getPlayerId(name, phone)
       .then(id => playerId = id)
       .catch(reason => {
         console.warn(`Can't get playerId. reason: ${reason}`);
@@ -129,7 +136,7 @@ export class GameService {
       });
     localStorage.setItem('playerId', playerId);
 
-    let deviceId = this.deviceId();
+    let deviceId = this.getDeviceId();
     let gameId = this.createGameId();
     console.log(`For player ${playerId} on device ${deviceId} created new game session ${gameId}.`);
     // TODO: 21.10.2019 Sergey Alekseev: проверить что такой записи ещё нет
@@ -137,15 +144,51 @@ export class GameService {
     return gameRef.set({deviceId, gameId, playerId, start, state: 'online'});
   }
 
+  setBestScore(playerId: string, bestScore: number) {
+    console.log(`set best score for playerId=${playerId}`);
+    return this.db.doc(`players/${playerId}`).set({bestScore}, {merge: true});
+  }
+
+
   /**
    * 1. Получаем токен сессии
    * 2. Удаляем из локального кеша
    * 3. Закрываем его в базе данных
    */
-  async stopGameSession(score: number) {
+  stopGameSession(score: number) {
+
+    let playerRef: AngularFirestoreDocument<Player> = this.db.doc(`players/${localStorage.getItem('playerId')}`);
+    playerRef.get().toPromise().then(doc => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        let player = doc.data() as Player;
+        console.log('stopGameSession');
+        if (player.bestScore === null || score > player.bestScore) {
+          console.log(`Update user ${player.playerId} on leaderboard with result ${score}`);
+          this.db.doc(`players/${player.playerId}`).set({bestScore: score,}, {merge: true})
+            .then(() => console.log(`update best score for user ${player.playerId} bestScore=${score}`))
+            .catch(reason => console.warn(`can't update bestScore for user ${player.playerId}`));
+
+          this.leaderboardService.addResult({uid: player.playerId, name: player.name, score})
+        }
+
+        this.db.doc(`players/${player.playerId}`).set({gameCount: player.gameCount + 1}, {merge: true})
+
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+
     const gameId = this.getGameId();
     this.deleteGameId();
+    console.log('remove playerId');
     localStorage.removeItem('playerId');
+
+    console.log('write game results');
     const gameRef: AngularFirestoreDocument<Game> = this.db.doc(`games/${gameId}`);
     return gameRef.set({score: score, stop: new Date(), state: 'offline'}, {merge: true});
   }
