@@ -22,7 +22,8 @@ export interface Action {
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
   private readonly settings: GameSettings;
   private readonly actionsCapacity = 10;
-  private readonly roundTime: number = 1 * 60;
+
+  readonly roundTime: number = 1 * 60;
 
   private isInitedComponent = false;
 
