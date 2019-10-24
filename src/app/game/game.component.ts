@@ -72,6 +72,21 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   startGame() {
     this.gameStarted = true;
     this.timerComponent.start();
+    this.game.startGame();
+
+  }
+
+  stopGame() {
+    if (this.gameStarted) {
+      // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
+      this.gameStarted = false;
+      this.game.stopGame();
+      this.gameService.stopGameSession(this.score)
+        .then(() => console.log("current game stopped"))
+        .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+      this.timerComponent.stop();
+      this.openResultsDialog();
+    }
   }
 
   openResultsDialog(): void {
@@ -84,18 +99,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
     dialogRef.afterClosed().subscribe(result => {
     });
-  }
-
-  stopGame() {
-    if (this.gameStarted) {
-      // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
-      this.gameStarted = false;
-      this.gameService.stopGameSession(this.score)
-        .then(() => console.log("current game stopped"))
-        .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
-      this.timerComponent.stop();
-      this.openResultsDialog();
-    }
   }
 
   openRulesDialog(): void {

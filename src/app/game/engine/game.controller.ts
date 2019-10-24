@@ -7,6 +7,7 @@ import {GameSettings} from "./game.settings";
 import {Direction} from "./direction.enum";
 import {LocationController} from "./location.controller";
 import {SkinsController} from "./skins.controller";
+import {TopicsController} from "./topics.controller";
 
 export class GameController extends GameSprite {
   private readonly locationController: LocationController;
@@ -19,6 +20,7 @@ export class GameController extends GameSprite {
   lives: number = 3;
   topic: string = "no topic";
 
+  topicsController: TopicsController;
   private isNotPaused: boolean = true;
   private readonly actionLogger: (message: string, color: string, points: string) => void;
   private readonly onGameOver: (score: number) => void;
@@ -34,6 +36,7 @@ export class GameController extends GameSprite {
     this.actionLogger = actionHandler;
     this.locationController = new LocationController(p, settings);
     this.skinsController = new SkinsController(p, settings);
+    this.topicsController = new TopicsController();
     this.playground = new Playground(this.p, this.settings);
     this.snake = new Snake(this.p, this.settings, this.locationController);
     this.snake.initSnake(4, p.createVector(4, 0));
@@ -44,6 +47,16 @@ export class GameController extends GameSprite {
     };
     this.onGameOver = onGameOver;
     this.loadFood(7);
+    this.topicsController.initTopics();
+
+  }
+
+  public startGame() {
+    this.topicsController.generateTopics();
+  }
+
+  public stopGame() {
+    this.topicsController.stopGenerateTopics();
   }
 
   loadFood(count: number) {
@@ -85,6 +98,7 @@ export class GameController extends GameSprite {
         eatenFood.shape = randomFreeSkin.shape;
       }
       this.snake.update(p);
+      this.topic = this.topicsController.getCurrentTopic().name;
     }
   }
 
