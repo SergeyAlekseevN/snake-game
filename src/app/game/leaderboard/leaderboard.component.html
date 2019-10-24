@@ -7,7 +7,7 @@
     <h1>Топ игроков</h1>
     <mat-list>
       <mat-list-item *ngFor="let player of players|async; let i=index;">
-        <h2>{{i + 1}}. {{player.name}} - {{player.score|number}}</h2>
+        <h2>{{i + 1}}. {{player.name}}: {{player.score|number}}</h2>
       </mat-list-item>
     </mat-list>
   </div>
