@@ -26,9 +26,10 @@ export class GameController extends GameSprite {
   private readonly actionLogger: (message: string, color: string, points: string) => void;
   private readonly onGameOver: (score: number) => void;
 
-  onChangeTopic = (topicName: string)=> {
+  onChangeTopic = (topicName: string) => {
     /*при смене темы перегенерим всю еду*/
     this.foods.forEach(food => this.regenerateFood(food));
+    this.settings.fps += 2;
   };
 
   constructor(
@@ -73,11 +74,12 @@ export class GameController extends GameSprite {
     }
   }
 
-  regenerateFood(food:Food){
+  regenerateFood(food: Food) {
     food.putOnNewPlace(this.locationController.getRandomFreeCell());
     food.icon = this.skinsController.getRandomFreeEmoji(food);
     food.text = this.topicsController.getNewWord();
   }
+
   update(p: p5): void {
     this.topic = this.topicsController.getCurrentTopic().name;
     if (this.isNotPaused) {
@@ -117,6 +119,7 @@ export class GameController extends GameSprite {
     } else {
       p.frameRate(this.settings.fps);
     }
+
     this.playground.draw(p);
     this.foods.forEach((food, index) => food.draw(p));
     this.snake.draw(p);
