@@ -26,6 +26,11 @@ export class GameController extends GameSprite {
   private readonly actionLogger: (message: string, color: string, points: string) => void;
   private readonly onGameOver: (score: number) => void;
 
+  onChangeTopic = (topicName: string)=> {
+    /*при смене темы перегенерим всю еду*/
+    this.foods.forEach(food => this.regenerateFood(food));
+  };
+
   constructor(
     public p: p5,
     public settings: GameSettings,
@@ -37,7 +42,7 @@ export class GameController extends GameSprite {
     this.actionLogger = actionHandler;
     this.locationController = new LocationController(p, settings);
     this.skinsController = new SkinsController(p, settings);
-    this.topicsController = new TopicsController();
+    this.topicsController = new TopicsController(this.onChangeTopic);
     this.playground = new Playground(this.p, this.settings);
     this.snake = new Snake(this.p, this.settings, this.locationController);
     this.snake.initSnake(4, p.createVector(4, 0));
@@ -63,13 +68,16 @@ export class GameController extends GameSprite {
   loadFood(count: number) {
     for (let i = 0; i < count; i++) {
       let food = new Food(this.p, this.settings, this.locationController);
-      food.putOnNewPlace(this.locationController.getRandomFreeCell());
-      food.icon = this.skinsController.getRandomFreeEmoji(food);
-      food.text = this.topicsController.getRandomWordFromCurrentTopic();
+      this.regenerateFood(food);
       this.foods.push(food);
     }
   }
 
+  regenerateFood(food:Food){
+    food.putOnNewPlace(this.locationController.getRandomFreeCell());
+    food.icon = this.skinsController.getRandomFreeEmoji(food);
+    food.text = this.topicsController.getNewWord();
+  }
   update(p: p5): void {
     this.topic = this.topicsController.getCurrentTopic().name;
     if (this.isNotPaused) {
@@ -92,10 +100,7 @@ export class GameController extends GameSprite {
           }
 
           this.snake.growUp();
-
-          eatenFood.putOnNewPlace(this.locationController.getRandomFreeCell());
-          eatenFood.icon = this.skinsController.getRandomFreeEmoji(eatenFood);
-          eatenFood.text = this.topicsController.getRandomWordFromCurrentTopic();
+          this.regenerateFood(eatenFood);
         }
         this.snake.update(p);
       }
@@ -103,8 +108,7 @@ export class GameController extends GameSprite {
   }
 
   isGoodFood(food: Food): boolean {
-    return this.topicsController.getCurrentTopic().words
-      .find(value => value.trim().startsWith(food.text.trim())) !== null;
+    return this.topicsController.getCurrentTopic().words.indexOf(food.text.trim()) > -1;
   }
 
   draw(p: p5): void {

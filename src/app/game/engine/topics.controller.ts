@@ -280,8 +280,12 @@ export class TopicsController {
   ];
   current: Topic;
   currentSubscription: Subscription;
+  private readonly onChangeTopic: (topicName: string) => void;
 
-  constructor() {
+  constructor(
+    onChangeTopic: (topicName: string) => void
+  ) {
+    this.onChangeTopic = onChangeTopic;
     this.initTopics();
   }
 
@@ -307,6 +311,7 @@ export class TopicsController {
       )
       .subscribe(topic => {
         this.current = topic;
+        this.onChangeTopic(topic.name);
       });
   }
 
@@ -323,6 +328,14 @@ export class TopicsController {
     return this.current.words[index];
   }
 
+  public getRandomWordFromNotCurrentTopics(): string {
+    const nonCurrent: Topic[] = this.topics.filter(topic => topic.name !== this.current.name);
+    const topicIndex = Math.floor(Math.random() * nonCurrent.length);
+    const words = nonCurrent[topicIndex].words;
+    const wordIndex = Math.floor(Math.random() * words.length);
+    return words[wordIndex];
+  }
+
   public getCurrentTopic() {
     return this.current;
   }
@@ -336,5 +349,10 @@ export class TopicsController {
       return this.topics[index];
     }
     return null;
+  }
+
+  getNewWord() {
+    const goodOrBad = Math.random() >= 0.4;
+    return goodOrBad ? this.getRandomWordFromCurrentTopic() : this.getRandomWordFromNotCurrentTopics();
   }
 }
