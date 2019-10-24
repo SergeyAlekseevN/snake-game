@@ -63,15 +63,15 @@ export class TopicsController {
     'contains',
     'size',
     'Red-Black tree',
-    'thread safe classes',
     'ArrayBlockingQueue',
     'ConcurrentSkipListMap',
     'SynchronousQueue',
     'LinkedTransferQueue',
     'CopyOnWriteArrayList',
     'ConcurrentHashMap',
-    'List.of(...)',
-    'Collections.singleton(...)'
+    'List.of()',
+    'Collections.singleton()',
+    'Stream'
   ];
   private readonly garbageCollectors = [
     "Serial",
@@ -140,7 +140,8 @@ export class TopicsController {
     'float',
     'native',
     'super',
-    'while'
+    'while',
+    'var'
   ];
   private readonly openSource = [
     'guava',
@@ -232,6 +233,32 @@ export class TopicsController {
     'LinkedTransferQueue',
     'CopyOnWriteArrayList',
     'ConcurrentHashMap',
+    'List.of(...)',
+    'Collections.singleton(...)'
+  ];
+  private readonly debugging = [
+    'jinfo',
+    'javap',
+    'jmap',
+    'jstack',
+    'jstat',
+    'jstatd',
+    'jhat',
+    'jconsole',
+    'visualvm',
+    'jps',
+    'jcmd',
+    'jfr',
+    'jhsdb',
+    'JVM TI',
+    'JDWP',
+    'jdb',
+    'Thread.getAllStackTraces()',
+    'AsyncGetCallTrace',
+    'kill -3',
+    'assert',
+    'System.err',
+    'Throwable.printStackTrace()'
   ];
   private readonly tools = [
     'jaotc',
@@ -266,16 +293,46 @@ export class TopicsController {
     'serialver',
     'unpack200',
   ];
-
+  private readonly newFeatures = [
+    'Lambdas',
+    'Default methods',
+    'Unsigned Integer API',
+    'Nashorn engine',
+    'Jigsaw',
+    'JShell',
+    'AOT',
+    'Flow',
+    'VarHandle',
+    'jlink',
+    'var',
+    'Graal',
+    '-XX:AllocateHeapAt',
+    'Epsilon',
+    'HTTP/2 client',
+    'TLS 1.3',
+    'Flight Recorder',
+    'ZGC',
+    'Shenandoah',
+    'jaotc',
+    'jdeps',
+    'jdeprscan',
+    'jfr',
+    'G1',
+    'CMS',
+    'Full GC',
+    'PermGen',
+  ];
   free: number[];//индексы неиспользованных тем
   topics: Topic[] = [
     {name: "Java Arguments", words: this.arguments},
     {name: "Java Collections", words: this.collections},
     {name: "Garbage Collectors", words: this.garbageCollectors},
+    {name: "Debugging Instruments", words: this.debugging},
     {name: "Java Keywords", words: this.keywords},
     {name: "Java Open Source", words: this.openSource},
     {name: "Java Packages", words: this.packages},
     {name: "Java Thread Safe", words: this.threadSafe},
+    {name: "New features of Java 8+", words: this.newFeatures},
     {name: "Java Tools", words: this.tools}
   ];
   current: Topic;
