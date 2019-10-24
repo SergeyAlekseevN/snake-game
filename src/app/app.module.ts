@@ -19,6 +19,7 @@ import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
 import {TimerComponent} from "./game/timer.component";
 import {RulesComponent} from './game/rules/rules.component';
+import { ResultsComponent } from './game/results/results.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {RulesComponent} from './game/rules/rules.component';
     LoginComponent,
     RegistrationComponent,
     ProfileComponent,
-    RulesComponent
+    RulesComponent,
+    ResultsComponent
   ],
   imports: [
     MaterialModule,
@@ -45,7 +47,8 @@ import {RulesComponent} from './game/rules/rules.component';
     FormsModule,
   ],
   entryComponents: [
-    RulesComponent
+    RulesComponent,
+    ResultsComponent
   ],
   providers: [
     LeaderboardService

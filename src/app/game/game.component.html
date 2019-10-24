@@ -1,7 +1,7 @@
 <div class="game">
   <div id="left-sidebar" *ngIf="p!==null">
     <div class="game-info">
-      <button routerLink="registration">Завершить игру</button>
+      <button (click)="stopGame()">Завершить игру</button>
       <h4>Игрок: {{(player|async)?.name}}</h4>
       <h4>Время:
         <app-timer [seconds]="roundTime" (onTimeout)="stopGame()"></app-timer>

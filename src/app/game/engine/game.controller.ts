@@ -19,13 +19,15 @@ export class GameController extends GameSprite {
   lives: number = 3;
   topic: string = "no topic";
 
-  private isPaused: boolean = true;
+  private isNotPaused: boolean = true;
   private readonly actionLogger: (message: string, color: string, points: string) => void;
+  private readonly onGameOver: (score: number) => void;
 
   constructor(
     public p: p5,
     public settings: GameSettings,
-    actionHandler: (message: string, color: string, points: string) => void
+    actionHandler: (message: string, color: string, points: string) => void,
+    onGameOver: (score: number) => void
   ) {
     super(p);
     console.log("constructor of game controller");
@@ -40,6 +42,7 @@ export class GameController extends GameSprite {
       this.lives -= 1;
       this.actionLogger("откусили хвост", "red", '-3');
     };
+    this.onGameOver = onGameOver;
     this.loadFood(7);
   }
 
@@ -56,8 +59,11 @@ export class GameController extends GameSprite {
   }
 
   update(p: p5): void {
-
-    if (this.isPaused) {
+    if (this.isNotPaused) {
+      if (this.lives <= 0) {
+        this.isNotPaused = false;
+        this.onGameOver(this.score);
+      }
       const foods = this.foods.filter((food, index) => this.snake.isFoodEaten(food.coord));
 
       if (foods.length > 0) {
@@ -83,7 +89,6 @@ export class GameController extends GameSprite {
   }
 
   draw(p: p5): void {
-
     if (p.keyIsDown(32)) {
       p.frameRate(this.settings.fps * 3);
     } else {
@@ -97,10 +102,10 @@ export class GameController extends GameSprite {
   keyPressed(keyCode: number) {
     console.log("keyCode:" + keyCode);
     if (keyCode == 80) { // P key
-      this.isPaused = !this.isPaused;
+      this.isNotPaused = !this.isNotPaused;
     }
 
-    if (this.isPaused) {
+    if (this.isNotPaused) {
       if (keyCode === this.p.UP_ARROW) {
         this.snake.setDirection(Direction.UP);
       } else if (keyCode === this.p.DOWN_ARROW) {

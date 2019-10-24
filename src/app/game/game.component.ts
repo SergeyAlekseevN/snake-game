@@ -9,6 +9,8 @@ import {Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {RulesComponent} from "./rules/rules.component";
 import {TimerComponent} from "./timer.component";
+import {ResultsComponent} from "./results/results.component";
+import {Router} from "@angular/router";
 
 export interface Action {
   message: string;
@@ -47,7 +49,8 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   constructor(
     public dialog: MatDialog,
-    public gameService: GameService
+    public gameService: GameService,
+    public router: Router
   ) {
     console.log("game.component -> constructor");
     this.settings = new GameSettings(800, 800, 32, 32, 6);
@@ -62,20 +65,41 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     }
   };
 
+  onGameOver = (score: number) => {
+    this.stopGame();
+  };
+
   startGame() {
     this.gameStarted = true;
     this.timerComponent.start();
   }
 
-  stopGame() {
-    // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
-    this.gameStarted = false;
-    this.gameService.stopGameSession(this.score)
-      .then(() => console.log("current game stopped"))
-      .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+  openResultsDialog(): void {
+    const dialogRef = this.dialog.open(ResultsComponent, {
+      // disableClose: true,
+      height: `${window.innerHeight / 4}`,
+      width: `${window.innerWidth / 4}`,
+      data: {player: this.player}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('STOP Game!!!');
+      return this.router.navigate(['/leaderboard']);
+    });
   }
 
-  openDialog(): void {
+  stopGame() {
+    if (this.gameStarted) {
+      // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
+      this.gameStarted = false;
+      this.gameService.stopGameSession(this.score)
+        .then(() => console.log("current game stopped"))
+        .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
+      this.openResultsDialog();
+    }
+  }
+
+  openRulesDialog(): void {
     const dialogRef = this.dialog.open(RulesComponent, {
       disableClose: true,
       height: `${window.innerHeight / 4}`,
@@ -103,7 +127,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   ngOnInit(): void {
     console.log('game.component -> onInit');
-    this.openDialog();
+    this.openRulesDialog();
   }
 
   ngOnDestroy(): void {
@@ -173,7 +197,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
           p.frameRate(this.settings.fps);
           p.noCursor();
           console.log("create game controller.");
-          this.game = new GameController(p, this.settings, this.actionHandler);
+          this.game = new GameController(p, this.settings, this.actionHandler, this.onGameOver);
         };
 
         p.draw = (): void => {
