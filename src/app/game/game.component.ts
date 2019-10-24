@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import * as P5 from 'p5';
 import * as p5 from 'p5';
 import {GameSettings} from "./engine/game.settings";
@@ -6,6 +6,9 @@ import {GameController} from "./engine/game.controller";
 import {GameService} from "./game.service";
 import {Player} from "../db/player.model";
 import {Observable} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {RulesComponent} from "./rules/rules.component";
+import {TimerComponent} from "./timer.component";
 
 export interface Action {
   message: string;
@@ -20,11 +23,14 @@ export interface Action {
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnDestroy, OnInit, AfterContentInit, AfterViewInit {
+  @ViewChild(TimerComponent, {static: false}) timerComponent: TimerComponent;
+
   private readonly settings: GameSettings;
+
   private readonly actionsCapacity = 10;
 
   readonly roundTime: number = 1 * 60;
-
+  gameStarted = false;
   private isInitedComponent = false;
 
   private game: GameController;
@@ -38,6 +44,16 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
   lives: number = 0;
   topic: string;
   actionCounter: number = 0;
+
+  constructor(
+    public dialog: MatDialog,
+    public gameService: GameService
+  ) {
+    console.log("game.component -> constructor");
+    this.settings = new GameSettings(800, 800, 32, 32, 6);
+    this.player = this.gameService.getCurrentPlayer();
+  }
+
   actionHandler = (message: string, color: string, points: string) => {
     this.actionCounter++;
     this.actions.push({index: this.actionCounter, message, color, points});
@@ -46,17 +62,31 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
     }
   };
 
+  startGame() {
+    this.gameStarted = true;
+    this.timerComponent.start();
+  }
+
   stopGame() {
     // TODO: 24.10.2019 Sergey Alekseev: show end modal widnow
+    this.gameStarted = false;
     this.gameService.stopGameSession(this.score)
       .then(() => console.log("current game stopped"))
       .catch(reason => console.warn(`Error with stopping current game. ${reason}`));
   }
 
-  constructor(public gameService: GameService) {
-    console.log("game.component -> constructor");
-    this.settings = new GameSettings(800, 800, 32, 32, 6);
-    this.player = this.gameService.getCurrentPlayer();
+  openDialog(): void {
+    const dialogRef = this.dialog.open(RulesComponent, {
+      disableClose: true,
+      height: `${window.innerHeight / 4}`,
+      width: `${window.innerWidth / 4}`,
+      data: {player: this.player}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Start Game!!!');
+      this.startGame();
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -73,6 +103,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
 
   ngOnInit(): void {
     console.log('game.component -> onInit');
+    this.openDialog();
   }
 
   ngOnDestroy(): void {
@@ -161,12 +192,14 @@ export class GameComponent implements OnDestroy, OnInit, AfterContentInit, After
         };
 
         p.keyPressed = (): void => {
-          console.log(`p -> key pressed ${p.keyCode}`);
-          this.game.keyPressed(p.keyCode);
+          if (this.gameStarted) {
+            console.log(`p -> key pressed ${p.keyCode}`);
+            this.game.keyPressed(p.keyCode);
+          }
         };
 
         p.mouseClicked = () => {
-          console.log(`p -> mouse clicked at ${p.mouseX}:${p.mouseY}`)
+          // console.log(`p -> mouse clicked at ${p.mouseX}:${p.mouseY}`)
         };
       }
     );

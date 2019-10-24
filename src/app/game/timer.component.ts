@@ -15,7 +15,6 @@ export class TimerComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.start();
   }
 
   stop() {
