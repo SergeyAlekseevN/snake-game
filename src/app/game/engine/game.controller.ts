@@ -29,7 +29,7 @@ export class GameController extends GameSprite {
   onChangeTopic = (topicName: string) => {
     /*при смене темы перегенерим всю еду*/
     this.foods.forEach(food => this.regenerateFood(food));
-    this.settings.fps += 2;
+    this.settings.fps += 1;
   };
 
   constructor(
