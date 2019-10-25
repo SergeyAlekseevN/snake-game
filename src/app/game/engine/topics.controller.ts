@@ -327,12 +327,12 @@ export class TopicsController {
     {name: "Java Arguments", words: this.arguments},
     {name: "Java Collections", words: this.collections},
     {name: "Garbage Collectors", words: this.garbageCollectors},
-    {name: "Debugging Instruments", words: this.debugging},
+    {name: "Debugging Tools", words: this.debugging},
     {name: "Java Keywords", words: this.keywords},
     {name: "Java Open Source", words: this.openSource},
     {name: "Java Packages", words: this.packages},
     {name: "Java Thread Safe", words: this.threadSafe},
-    {name: "New features of Java 8+", words: this.newFeatures},
+    {name: "New in Java 8+", words: this.newFeatures},
     {name: "Java Tools", words: this.tools}
   ];
   current: Topic;
