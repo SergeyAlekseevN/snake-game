@@ -20,5 +20,8 @@ jobs:
           name: 'Build Project'
           command: 'npm run build --prod'
       - run:
+          name: 'Install Firebase'
+          command: 'npm install --save-dev firebase-tools'
+      - run:
           name: 'Deploy to Firebase Hosting'
           command: 'firebase deploy --token="$FIREBASE_TOKEN"'
