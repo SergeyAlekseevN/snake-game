@@ -1,4 +1,7 @@
 {
+  "projects": {
+    "default": "joker-snake"
+  },
   "targets": {
     "joker-snake": {
       "hosting": {
