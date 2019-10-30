@@ -19,7 +19,9 @@ import {LeaderboardService} from "./game/leaderboard/leaderboard.service";
 import {ProfileComponent} from './user/profile/profile.component';
 import {TimerComponent} from "./game/timer.component";
 import {RulesComponent} from './game/rules/rules.component';
-import { ResultsComponent } from './game/results/results.component';
+import {ResultsComponent} from './game/results/results.component';
+import {StatsComponent} from './stats/stats.component';
+import {Angular2CsvModule} from "angular2-csv";
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { ResultsComponent } from './game/results/results.component';
     RegistrationComponent,
     ProfileComponent,
     RulesComponent,
-    ResultsComponent
+    ResultsComponent,
+    StatsComponent
   ],
   imports: [
     MaterialModule,
@@ -44,6 +47,7 @@ import { ResultsComponent } from './game/results/results.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
+    Angular2CsvModule,
     FormsModule,
   ],
   entryComponents: [

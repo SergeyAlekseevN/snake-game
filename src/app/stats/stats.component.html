@@ -1,0 +1,16 @@
+<h2>Game stats</h2>
+<p>Best score: {{bestScore|async}}</p>
+<p>Worst score: {{worstScore|async}}</p>
+<p>Total players: {{totalPlayers|async}}</p>
+<p>Total games: {{totalGames|async}}</p>
+
+<p>Player with max game count: {{(playerWithMaxGameCount|async)?.name}}({{(playerWithMaxGameCount|async)?.phone}})
+  сыграл {{(playerWithMaxGameCount|async)?.gameCount}} игры с лучшим
+  результатом {{(playerWithMaxGameCount|async)?.bestScore}}.
+</p>
+
+<div>Скачать результаты игры как csv:
+  <angular2csv filename="joker-2019-ok-game-players.csv"
+               [data]="allPlayers|async"
+               [options]="options"></angular2csv>
+</div>

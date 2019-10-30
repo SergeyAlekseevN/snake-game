@@ -7,9 +7,11 @@ import {AuthGuard} from "./auth/auth.guard";
 import {LoginComponent} from "./user/login/login.component";
 import {RegistrationComponent} from "./game/registration/registration.component";
 import {GameGuard} from "./game/game.guard";
+import {StatsComponent} from "./stats/stats.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'registration', pathMatch: 'full'},
+  {path: 'stats', component: StatsComponent, data: {allowedRoles: ['admin']}, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {
     path: 'registration',
