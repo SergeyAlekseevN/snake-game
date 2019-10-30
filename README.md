@@ -1,4 +1,5 @@
-[![CircleCI](https://circleci.com/gh/SergeyAlekseevN/snake-game/tree/master.svg?style=shield)](https://circleci.com/gh/SergeyAlekseevN/snake-game/tree/master)
+[![CircleCI](https://circleci.com/gh/SergeyAlekseevN/snake-game.svg?style=svg&circle-token=6b1c7c2b2331fa486e462542c5ec85a387350081)](https://circleci.com/gh/SergeyAlekseevN/snake-game)
+
 # JokerSnake
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.1.
