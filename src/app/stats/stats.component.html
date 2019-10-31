@@ -9,8 +9,4 @@
   результатом {{(playerWithMaxGameCount|async)?.bestScore}}.
 </p>
 
-<div>Скачать результаты игры как csv:
-  <angular2csv filename="joker-2019-ok-game-players.csv"
-               [data]="allPlayers|async"
-               [options]="options"></angular2csv>
-</div>
+<span>Скачать результаты игры как csv: <angular2csv [data]="allPlayers|async" [options]="options"></angular2csv></span>

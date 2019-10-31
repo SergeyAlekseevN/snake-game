@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ResultsService} from "./results.service";
 import {Observable} from "rxjs";
 import {Player} from "../db/player.model";
-import {Angular2CsvService} from "angular2-csv";
+import {Angular2CsvService, Options} from "angular2-csv";
 
 @Component({
   selector: 'app-stats',
@@ -17,6 +17,20 @@ export class StatsComponent implements OnInit {
   playerWithMaxGameCount: Observable<Player>;
   allPlayers: Observable<Player[]>;
 
+  readonly options: Options = {
+    filename: "joker-2019-ok-game-players.csv",
+    title: "Игроки со стенда OK.TECH на конференции Joker<?> 2019",
+    showTitle: true,
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalseparator: '.',
+    useBom: true,
+    removeNewLines: false,
+    showLabels: true,
+    headers: ['имя', 'телефон', 'количество игр', 'лучший результат'],
+    keys: ['name', 'phone', 'gameCount', 'bestScore']
+  };
+
   constructor(public results: ResultsService, private csv: Angular2CsvService) {
     this.bestScore = results.getBestScore();
     this.worstScore = results.getWorstScore();
@@ -28,17 +42,4 @@ export class StatsComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  options = {
-    showTitle: true,
-    title: "Игроки со стенда OK.TECH на конференции Joker<?> 2019",
-    fieldSeparator: ',',
-    quoteStrings: '"',
-    decimalseparator: '.',
-    useBom: true,
-    removeNewLines: false,
-    showLabels: true,
-    headers: ['имя', 'телефон', 'количество игр', 'лучший результат'],
-    keys: ['name', 'phone', 'gameCount', 'bestScore']
-  };
 }
